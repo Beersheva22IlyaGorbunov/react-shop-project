@@ -16,12 +16,13 @@ const headerStyle: SxProps<Theme> = {
   flexDirection: "row",
   justifyContent: "space-between",
   alignItems: "center",
-  backgroundColor: "lightgray",
+  backgroundColor: "rgba(0, 0, 0, .5)",
+  backdropFilter: "blur(3px)",
   mt: 2,
-  width: "90%",
-  borderRadius: 4,
   px: 2,
-  left: "5%",
+  borderRadius: 4,
+  mx: "auto",
+  width: "90%"
 };
 
 const Navigator: React.FC<Props> = ({
@@ -40,7 +41,7 @@ const Navigator: React.FC<Props> = ({
         {menuPoints.map((point) => (
           <Tab
             key={point.title}
-            sx={{ "&:hover": { color: "black" } }}
+            sx={{ "&:hover": { color: "white" }, color: "whitesmoke" }}
             label={point.title}
             component={Link}
             to={point.path}

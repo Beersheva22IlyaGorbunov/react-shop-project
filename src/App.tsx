@@ -1,53 +1,82 @@
-import React, { ReactElement } from 'react';
-import './App.css';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import NavigatorDispatcher from './components/navigator/NavigatorDispatcher';
-import Home from './pages/Home';
-import Catalog from './pages/Catalog';
+import React, { ReactElement } from "react";
+import "./App.css";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import NavigatorDispatcher from "./components/navigator/NavigatorDispatcher";
+import Home from "./pages/Home";
+import Catalog from "./pages/Catalog";
+import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
+import { green, purple } from "@mui/material/colors";
+import Admin from "./pages/Admin";
+import { useAuthSelector } from "./redux/store";
 
 export interface MenuPoint {
-  title: string
-  path: string
-  element: ReactElement
-  order?: number
-  forRoles: Array<string | null>
+  title: string;
+  path: string;
+  element: ReactElement;
+  order?: number;
+  forRoles: Array<string | null>;
 }
 
 const menuPoints: MenuPoint[] = [
   {
-    title: 'Home',
+    title: "Home",
     element: <Home />,
     order: 1,
-    path: '',
-    forRoles: ['admin', 'user', null]
+    path: "",
+    forRoles: ["admin", "user", null],
   },
   {
-    title: 'Catalog',
+    title: "Catalog",
     element: <Catalog />,
     order: 2,
-    path: 'catalog',
-    forRoles: ['admin', 'user', null]
+    path: "catalog",
+    forRoles: ["admin", "user", null],
   },
-]
+  {
+    title: "Admin",
+    element: <Admin />,
+    order: 3,
+    path: "admin",
+    forRoles: ["admin"],
+  }
+];
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#ef9a83",
+    },
+    secondary: {
+      main: "#83d8ef",
+    },
+  },
+});
+
+function getMenuPoints(role: string | null): JSX.Element[] {
+  return menuPoints.filter((point) => point.forRoles.includes(role)).map((point, index) => (
+    <Route
+      key={index}
+      index={point.path === ""}
+      path={point.path}
+      element={point.element}
+    />
+  ))
+}
 
 function App() {
+  const user = useAuthSelector();
   return (
-    <BrowserRouter>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <BrowserRouter>
         <Routes>
           <Route
-            path='/'
+            path="/"
             element={<NavigatorDispatcher menuPoints={menuPoints} />}
           >
-            {menuPoints.map((point, index) => (
-              <Route
-                key={index}
-                index={point.path === ''}
-                path={point.path}
-                element={point.element}
-              />
-            ))}
+            {getMenuPoints(user?.role ? user.role : null)}
             <Route
-              path='*'
+              path="*"
               element={
                 <div>
                   <h2>404 Page not found</h2>
@@ -57,6 +86,7 @@ function App() {
           </Route>
         </Routes>
       </BrowserRouter>
+    </ThemeProvider>
   );
 }
 

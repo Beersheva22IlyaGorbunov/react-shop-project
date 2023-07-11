@@ -1,8 +1,9 @@
 import UserData from "../model/service/UserData";
 import AuthProviderInfo from "../model/service/AuthProviderInfo";
+import LoginData from "../model/service/LoginData";
 
 export default interface AuthService {
-  login(): Promise<UserData>;
+  login(providerName: string, loginData: LoginData): Promise<UserData>;
   logout(): Promise<void>;
-  getAuthProviders(): AuthProviderInfo[];
+  getAvailableProviders(): { providerName: string; providerIconUrl: string }[];
 }
