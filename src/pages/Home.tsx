@@ -46,6 +46,7 @@ const Home = () => {
                 id: "1",
                 name: "Example",
                 imgLinks: [],
+                category: "",
                 description: "Some description",
                 price: 100,
               }}
@@ -56,6 +57,7 @@ const Home = () => {
               product={{
                 id: "1",
                 name: "Example",
+                category: "",
                 imgLinks: [],
                 description: "Some description",
                 price: 100,
@@ -67,6 +69,7 @@ const Home = () => {
               product={{
                 id: "1",
                 name: "Example",
+                category: "",
                 imgLinks: [],
                 description: "Some description",
                 price: 100,
@@ -78,6 +81,7 @@ const Home = () => {
               product={{
                 id: "1",
                 name: "Example",
+                category: "",
                 imgLinks: [],
                 description: "Some description",
                 price: 100,
@@ -94,6 +98,7 @@ const Home = () => {
               product={{
                 id: "1",
                 name: "Example",
+                category: "",
                 imgLinks: [],
                 description: "Some description",
                 price: 100,
@@ -105,6 +110,7 @@ const Home = () => {
               product={{
                 id: "1",
                 name: "Example",
+                category: "",
                 imgLinks: [],
                 description: "Some description",
                 price: 100,
@@ -116,6 +122,7 @@ const Home = () => {
               product={{
                 id: "1",
                 name: "Example",
+                category: "",
                 imgLinks: [],
                 description: "Some description",
                 price: 100,
@@ -127,6 +134,7 @@ const Home = () => {
               product={{
                 id: "1",
                 name: "Example",
+                category: "",
                 imgLinks: [],
                 description: "Some description",
                 price: 100,

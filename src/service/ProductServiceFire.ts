@@ -2,19 +2,19 @@ import { Observable, catchError, of } from "rxjs";
 import { collectionData } from "rxfire/firestore";
 import Product from "../model/Product";
 import ProductService from "./ProductService";
+import { v4 as uuid } from 'uuid';
 import {
   FirestoreError,
   collection,
   getFirestore,
   getDocs,
-  QuerySnapshot,
   QueryDocumentSnapshot,
   DocumentReference,
   doc,
   setDoc,
 } from "firebase/firestore";
+import { ref, uploadBytes, getDownloadURL, getStorage, FirebaseStorage } from "firebase/storage"
 import firestoreApp from "../config/firebaseConfig";
-import { randomUUID } from "crypto";
 
 const PRODUCTS_COLLECTION_NAME = "products";
 
@@ -23,6 +23,7 @@ export default class ProductServiceFire implements ProductService {
     getFirestore(firestoreApp),
     PRODUCTS_COLLECTION_NAME
   );
+  private readonly storage: FirebaseStorage = getStorage(firestoreApp);
 
   async getProducts(): Promise<string | Product[]> {
     const productsSnapshot = await getDocs(this.collectionRef);
@@ -44,9 +45,13 @@ export default class ProductServiceFire implements ProductService {
     ) as Observable<string | Product[]>;
   }
 
-  async addProduct(product: Product): Promise<Product> {
-    const newId = randomUUID();
+  async addProduct(product: Product, images: File[]): Promise<Product> {
+    const newId = uuid();
     const docRef = this.getDocRef(newId);
+    if (images.length > 0) {
+      const urls = await this.uploadImages(images);
+      product.imgLinks = urls;
+    }
     try {
       await setDoc(docRef, product);
     } catch (err: any) {
@@ -55,6 +60,17 @@ export default class ProductServiceFire implements ProductService {
       throw errorMessage;
     }
     return product;
+  }
+
+  private async uploadImages(images: File[]): Promise<string[]> {
+    const uploadPromises = images.map(async (image) => {
+      const storageRef = ref(this.storage, `/images/${image.name}`)
+      return uploadBytes(storageRef, image)
+    })
+    const uploadResults = await Promise.all(uploadPromises);
+    const urlsPromises = uploadResults.map((res) => getDownloadURL(res.ref))
+    const urls = await Promise.all(urlsPromises);
+    return urls;
   }
 
   deleteProduct(id: string): Promise<void> {
@@ -90,6 +106,7 @@ export default class ProductServiceFire implements ProductService {
       id: snapshot.data().id,
       name: snapshot.data().name,
       imgLinks: snapshot.data().imgLinks,
+      category: snapshot.data().category,
       description: snapshot.data().description,
       price: snapshot.data().price,
     };

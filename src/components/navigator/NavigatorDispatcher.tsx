@@ -4,6 +4,9 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Navigator from "./Navigator";
 import NavigatorPortrait from "./NavigatorPortrait";
 import MenuPoint from "../../model/MenuPoint";
+import { useAuthSelector } from "../../redux/store";
+import UserMenu from "./UserMenu";
+import SignInMenu from "./SignInMenu";
 
 type Props = {
   menuPoints: MenuPoint[];
@@ -26,6 +29,7 @@ const NavigatorDispatcher: React.FC<Props> = ({ menuPoints }) => {
   const [value, setValue] = useState<number>(0);
   const navigate = useNavigate();
   const location = useLocation();
+  const user = useAuthSelector();
 
   const theme = useTheme();
   const isNarrow = useMediaQuery(theme.breakpoints.down("md"));
@@ -56,12 +60,13 @@ const NavigatorDispatcher: React.FC<Props> = ({ menuPoints }) => {
   }
 
   return (
-    <Box>
+    <Box flexDirection={"column"} display={"flex"} minHeight={"100vh"}>
       {!isNarrow ? (
         <Navigator
           menuPoints={menuPoints}
           selectedTab={value}
           tabChangeFn={handleTabChange}
+          rightSlot={user ? <UserMenu /> : <SignInMenu />}
         />
       ) : (
         <NavigatorPortrait
@@ -71,7 +76,7 @@ const NavigatorDispatcher: React.FC<Props> = ({ menuPoints }) => {
         />
       )}
       <Outlet />
-      <Copyright sx={{ my: 3 }} />
+      <Copyright sx={{ py: 3, mt: "auto" }} />
     </Box>
   );
 };

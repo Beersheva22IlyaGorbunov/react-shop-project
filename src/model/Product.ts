@@ -1,8 +1,10 @@
 type Product = {
-  id: string;
+  id?: string;
   name: string;
   imgLinks: string[];
   description: string;
+  discount?: number;
+  category: string;
   price: number;
 };
 

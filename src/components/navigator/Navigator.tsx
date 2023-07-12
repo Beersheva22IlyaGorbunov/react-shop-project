@@ -1,5 +1,5 @@
 import { AppBar, SxProps, Tab, Tabs } from "@mui/material";
-import React from "react";
+import React, { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import UserMenu from "./UserMenu";
 import { Theme } from "@emotion/react";
@@ -8,6 +8,7 @@ import MenuPoint from "../../model/MenuPoint";
 type Props = {
   menuPoints: MenuPoint[];
   selectedTab: number;
+  rightSlot: ReactNode;
   tabChangeFn: (tabIndex: number) => void;
 };
 
@@ -22,12 +23,13 @@ const headerStyle: SxProps<Theme> = {
   px: 2,
   borderRadius: 4,
   mx: "auto",
-  width: "90%"
+  width: "90%",
 };
 
 const Navigator: React.FC<Props> = ({
   menuPoints,
   selectedTab,
+  rightSlot,
   tabChangeFn,
 }) => {
 
@@ -48,7 +50,7 @@ const Navigator: React.FC<Props> = ({
           />
         ))}
       </Tabs>
-      <UserMenu />
+      {rightSlot}
     </AppBar>
   );
 };
