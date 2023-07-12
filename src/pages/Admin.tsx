@@ -1,10 +1,10 @@
 import React from "react";
-import ProductTable from "../components/adminPage/ProductTable";
+import ProductTable from "../components/adminPage/ProductsTable";
 import { Container, Grid, Paper, Tab, Tabs } from "@mui/material";
 import { Link, Route, Routes } from "react-router-dom";
 import ProductsTab from "../components/adminPage/ProductsTab";
 import SideTabsNavigator from "../components/adminPage/SideTabsNavigator";
-import UsersTab from "../components/adminPage/UsersTab";
+import ClientsTab from "../components/adminPage/ClientsTab";
 import GeneralSettingsTab from "../components/adminPage/GeneralSettingsTab";
 import MenuPoint from "../model/MenuPoint";
 
@@ -24,10 +24,10 @@ const menuPoints: MenuPoint[] = [
     forRoles: ["admin"],
   },
   {
-    title: "Users",
-    element: <UsersTab />,
+    title: "Clients",
+    element: <ClientsTab />,
     order: 3,
-    path: "users",
+    path: "clients",
     forRoles: ["admin"],
   }
 ];

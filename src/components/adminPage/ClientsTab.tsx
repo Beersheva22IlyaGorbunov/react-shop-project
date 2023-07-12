@@ -1,9 +1,9 @@
 import React from 'react'
 
-const UsersTab = () => {
+const ClientsTab = () => {
   return (
     <div>UsersTab</div>
   )
 }
 
-export default UsersTab
+export default ClientsTab

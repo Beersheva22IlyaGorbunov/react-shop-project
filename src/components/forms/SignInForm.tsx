@@ -14,7 +14,7 @@ import LoginData from '../../model/service/LoginData'
 import ActionResult from '../../model/ActionResult'
 
 interface Props {
-  onSignIn: (loginData: LoginData) => Promise<ActionResult>
+  onSignIn: (provider: string, loginData: LoginData) => Promise<ActionResult>
 }
 
 export const SignInForm: React.FC<Props> = ({ onSignIn }) => {
@@ -32,7 +32,7 @@ export const SignInForm: React.FC<Props> = ({ onSignIn }) => {
         email,
         password
       }
-      const res = await onSignIn(loginData)
+      const res = await onSignIn("email", loginData)
       setLoginRes(res)
       setIsLoading(false)
     }

@@ -36,17 +36,14 @@ const SignIn = () => {
   return (
     <Box display="flex" flexDirection="column" alignItems="center" mt={2}>
       <Box width="sx">
-        <SignInForm
-          onSignIn={function (loginData: LoginData): Promise<ActionResult> {
-            throw new Error("Function not implemented.");
-          }}
-        />
+        <SignInForm onSignIn={loginFn} />
         {authProviders.length > 0 && (
           <>
             <Divider>OR</Divider>
             <Box display="flex" justifyContent="center" gap={2} mt={1}>
               {authProviders.map((provider) => (
                 <IconButton
+                  key={provider.providerName}
                   sx={{
                     borderWidth: "1px",
                     borderStyle: "solid",

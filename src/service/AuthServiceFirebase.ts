@@ -1,6 +1,7 @@
 import { getFirestore, collection, doc, getDoc } from "firebase/firestore";
 import {
   UserCredential,
+  createUserWithEmailAndPassword,
   getAuth,
   signInWithEmailAndPassword,
   signInWithPopup,
@@ -12,18 +13,32 @@ import UserData from "../model/service/UserData";
 import LoginData from "../model/service/LoginData";
 import authProviders from "./FirebaseProviders";
 
+const ADMINISTRATORS_COLLECTION = "administrators"
+
 export default class AuthServiceFirebase implements AuthService {
   private readonly auth = getAuth(firebaseApp);
   private readonly administratorsCollection = collection(
     getFirestore(firebaseApp),
-    "administrators"
+    ADMINISTRATORS_COLLECTION
   );
+
+  async register(user: LoginData): Promise<string> {
+    const userCredentials = await createUserWithEmailAndPassword(
+      this.auth,
+      user.email,
+      user.password
+    );
+    if (userCredentials.user.email === null) {
+      throw "Something wents wrong";
+    }
+    return userCredentials.user.uid;
+  }
 
   async login(providerName: string, loginData: LoginData): Promise<UserData> {
     let userData: UserData = null;
     try {
       const userCredentials =
-        loginData.email.toLowerCase() === "email"
+        providerName.toLowerCase() === "email"
           ? await signInWithEmailAndPassword(
               this.auth,
               loginData.email,

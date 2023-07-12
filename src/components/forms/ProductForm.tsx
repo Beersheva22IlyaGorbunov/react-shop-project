@@ -1,4 +1,5 @@
 import {
+  Alert,
   Box,
   Button,
   FormControl,
@@ -13,9 +14,10 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import Product from "../../model/Product";
+import ActionResult from "../../model/ActionResult";
 
 type Props = {
-  onSubmit: (product: Product, images: File[]) => void;
+  onSubmit: (product: Product, images: File[]) => Promise<ActionResult>;
   initial?: Product;
 };
 
@@ -31,6 +33,7 @@ const ProductForm: React.FC<Props> = ({ onSubmit, initial = emptyProduct }) => {
   const categories = ["Spring", "Celebrations"];
   const [product, setProduct] = useState<Product>(initial);
   const [files, setFiles] = useState<File[]>([]);
+  const [error, setError] = useState<string>("");
 
   function handleNameChange(e: React.ChangeEvent<HTMLInputElement>) {
     const name = e.target.value;
@@ -72,15 +75,37 @@ const ProductForm: React.FC<Props> = ({ onSubmit, initial = emptyProduct }) => {
     }
   }
 
-  function handleFormSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleFormSubmit(e: any) {
     e.preventDefault();
-    onSubmit(product, files);
+    console.log(e);
+    const res = await onSubmit(product, files);
+    console.log(res);
+    if (res.status === "success") {
+      e.target.reset();
+    } else {
+      setError(res.message);
+    }
+  }
+
+  function handleFormChange() {
+    setError("");
+  }
+
+  function onResetFn() {
+    setProduct(initial);
+    setFiles([]);
   }
 
   return (
-    <Box p={2} component={"form"} onSubmit={handleFormSubmit}>
+    <Box
+      component={"form"}
+      p={2}
+      onChange={handleFormChange}
+      onReset={onResetFn}
+      onSubmit={handleFormSubmit}
+    >
       <Typography variant="h5" mb={2}>
-        {initial ? "Edit" : "Add"} product
+        {initial !== emptyProduct ? "Edit" : "Add"} product
       </Typography>
       <Grid container spacing={1} columns={12}>
         <Grid item xs={12} md={6}>
@@ -147,20 +172,26 @@ const ProductForm: React.FC<Props> = ({ onSubmit, initial = emptyProduct }) => {
           </FormControl>
         </Grid>
       </Grid>
-      <Box sx={{display: "flex", alignItems: "center", gap: 1, mt: 1}}>
-      <Button variant="contained" component="label">
-        Upload File
-        <input
-          onChange={handleFilesChange}
-          accept="image/png, image/jpeg"
-          multiple
-          name="images"
-          type="file"
-          hidden
-        />
-      </Button>
-      {files.length > 0 && <Typography>{files.length} {files.length === 1 ? "was" : "were"} files added</Typography>}
+      <Box sx={{ display: "flex", alignItems: "center", gap: 1, mt: 1 }}>
+        <Button variant="contained" component="label">
+          Upload File
+          <input
+            onChange={handleFilesChange}
+            accept="image/png, image/jpeg"
+            multiple
+            name="images"
+            type="file"
+            hidden
+          />
+        </Button>
+        {files.length > 0 && (
+          <Typography>
+            {files.length} {files.length === 1 ? "file was" : " files were"}{" "}
+            added
+          </Typography>
+        )}
       </Box>
+      {error && <Alert severity="error" title={error} />}
       <Box mt={1} textAlign={"end"}>
         <Button type="reset" variant="outlined" color="warning">
           Reset

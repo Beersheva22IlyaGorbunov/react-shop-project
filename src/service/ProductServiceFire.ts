@@ -1,8 +1,8 @@
-import { Observable, catchError, of } from "rxjs";
+import { Observable, catchError, map, of } from "rxjs";
 import { collectionData } from "rxfire/firestore";
 import Product from "../model/Product";
 import ProductService from "./ProductService";
-import { v4 as uuid } from 'uuid';
+import { v4 as uuid } from "uuid";
 import {
   FirestoreError,
   collection,
@@ -13,8 +13,15 @@ import {
   doc,
   setDoc,
 } from "firebase/firestore";
-import { ref, uploadBytes, getDownloadURL, getStorage, FirebaseStorage } from "firebase/storage"
+import {
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  getStorage,
+  FirebaseStorage,
+} from "firebase/storage";
 import firestoreApp from "../config/firebaseConfig";
+import { getDocRef } from "../utils/firebase";
 
 const PRODUCTS_COLLECTION_NAME = "products";
 
@@ -41,13 +48,18 @@ export default class ProductServiceFire implements ProductService {
         const firestoreError: FirestoreError = err;
         const errorMessage = this.getErrorMsg(firestoreError);
         return of(errorMessage);
+      }),
+      map((products) => {
+        console.log(products);
+        return products;
       })
     ) as Observable<string | Product[]>;
   }
 
   async addProduct(product: Product, images: File[]): Promise<Product> {
     const newId = uuid();
-    const docRef = this.getDocRef(newId);
+    product.id = newId;
+    const docRef = getDocRef(this.collectionRef, newId);
     if (images.length > 0) {
       const urls = await this.uploadImages(images);
       product.imgLinks = urls;
@@ -64,11 +76,11 @@ export default class ProductServiceFire implements ProductService {
 
   private async uploadImages(images: File[]): Promise<string[]> {
     const uploadPromises = images.map(async (image) => {
-      const storageRef = ref(this.storage, `/images/${image.name}`)
-      return uploadBytes(storageRef, image)
-    })
+      const storageRef = ref(this.storage, `/images/${image.name}`);
+      return uploadBytes(storageRef, image);
+    });
     const uploadResults = await Promise.all(uploadPromises);
-    const urlsPromises = uploadResults.map((res) => getDownloadURL(res.ref))
+    const urlsPromises = uploadResults.map((res) => getDownloadURL(res.ref));
     const urls = await Promise.all(urlsPromises);
     return urls;
   }
@@ -79,10 +91,6 @@ export default class ProductServiceFire implements ProductService {
 
   updateProduct(updatedProduct: Product): Promise<Product> {
     throw new Error("Method not implemented.");
-  }
-
-  private getDocRef(id: string): DocumentReference {
-    return doc(this.collectionRef, id);
   }
 
   private getErrorMsg(error: FirestoreError): string {
@@ -102,8 +110,9 @@ export default class ProductServiceFire implements ProductService {
   }
 
   private getProduct(snapshot: QueryDocumentSnapshot): Product {
+    console.log(snapshot);
     return {
-      id: snapshot.data().id,
+      id: snapshot.id,
       name: snapshot.data().name,
       imgLinks: snapshot.data().imgLinks,
       category: snapshot.data().category,

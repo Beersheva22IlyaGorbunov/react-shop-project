@@ -14,14 +14,15 @@ const ProductCard: React.FC<Props> = ({ product }) => {
     <Card>
       <CardMedia
         component="img"
-        // maxHeight="180"
-        sx={{maxHeight: "180"}}
+        sx={{ maxHeight: "180", aspectRatio: "1/1" }}
         image={product.imgLinks[0] ?? placeholderUrl}
         alt={product.name}
       />
       <CardContent>
         <Typography>{product.name}</Typography>
-        <Typography variant="body1" textAlign="end">{product.price}</Typography>
+        <Typography variant="body1" textAlign="end">
+          {product.price}
+        </Typography>
       </CardContent>
     </Card>
   );
