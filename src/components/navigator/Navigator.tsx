@@ -3,7 +3,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import UserMenu from "./UserMenu";
 import { Theme } from "@emotion/react";
-import { MenuPoint } from "../../App";
+import MenuPoint from "../../model/MenuPoint";
 
 type Props = {
   menuPoints: MenuPoint[];
@@ -38,7 +38,7 @@ const Navigator: React.FC<Props> = ({
         onChange={(__, newValue) => tabChangeFn(newValue)}
         aria-label="basic tabs example"
       >
-        {menuPoints.map((point) => (
+        {menuPoints.map((point: MenuPoint) => (
           <Tab
             key={point.title}
             sx={{ "&:hover": { color: "white" }, color: "whitesmoke" }}

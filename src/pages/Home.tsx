@@ -36,7 +36,9 @@ const Home = () => {
         </Stack>
       </Box>
       <Container maxWidth={"lg"}>
-        <Typography variant="h5" my={1}>Popular products</Typography>
+        <Typography variant="h5" my={1}>
+          Popular products
+        </Typography>
         <Grid container spacing={2} columns={12}>
           <Grid item xs={6} sm={4} md={3}>
             <ProductCard
@@ -83,7 +85,9 @@ const Home = () => {
             />
           </Grid>
         </Grid>
-        <Typography variant="h5" my={1}>Top categories</Typography>
+        <Typography variant="h5" my={1}>
+          Top categories
+        </Typography>
         <Grid container spacing={2} columns={12}>
           <Grid item xs={6} sm={4} md={3}>
             <ProductCard
@@ -130,6 +134,14 @@ const Home = () => {
             />
           </Grid>
         </Grid>
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1475.592777669832!2d34.805658133238055!3d31.911086649663247!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1502b6e51b6e1de5%3A0xc159edda556fe098!2sTel%20Ran!5e0!3m2!1sen!2sil!4v1689136943880!5m2!1sen!2sil"
+          width="100%"
+          height="400"
+          title="Google maps"
+          style={{border: 0}}
+          loading="lazy"
+        ></iframe>
       </Container>
     </Box>
   );

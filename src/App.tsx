@@ -8,14 +8,7 @@ import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 import { green, purple } from "@mui/material/colors";
 import Admin from "./pages/Admin";
 import { useAuthSelector } from "./redux/store";
-
-export interface MenuPoint {
-  title: string;
-  path: string;
-  element: ReactElement;
-  order?: number;
-  forRoles: Array<string | null>;
-}
+import MenuPoint from "./model/MenuPoint";
 
 const menuPoints: MenuPoint[] = [
   {
@@ -35,10 +28,11 @@ const menuPoints: MenuPoint[] = [
   {
     title: "Admin",
     element: <Admin />,
+    hasChilds: true,
     order: 3,
     path: "admin",
     forRoles: ["admin"],
-  }
+  },
 ];
 
 const theme = createTheme({
@@ -53,14 +47,16 @@ const theme = createTheme({
 });
 
 function getMenuPoints(role: string | null): JSX.Element[] {
-  return menuPoints.filter((point) => point.forRoles.includes(role)).map((point, index) => (
-    <Route
-      key={index}
-      index={point.path === ""}
-      path={point.path}
-      element={point.element}
-    />
-  ))
+  return menuPoints
+    .filter((point) => point.forRoles.includes(role))
+    .map((point, index) => (
+      <Route
+        key={index}
+        index={point.path === ""}
+        path={point.hasChilds ? point.path + "/*" : point.path}
+        element={point.element}
+      />
+    ));
 }
 
 function App() {
