@@ -14,28 +14,31 @@ import { productService } from "../../config/servicesConfig";
 import CategoryForm from "../forms/CategoryForm";
 import ActionResult from "../../model/ActionResult";
 import Products from "./Products";
+import useCategories from "../../hooks/useCategories";
 
 const ProductsTab = () => {
   const [modalIsVisible, setModalIsVisible] = useState<boolean>(false);
-  const productForm = <ProductForm onSubmit={handleAddProduct}/>
-  const categoryForm = <CategoryForm onSubmit={handleAddCategory} />
-  const formRef = useRef(productForm)
+  const productForm = <ProductForm onSubmit={handleAddProduct} />;
+  const formRef = useRef(productForm);
 
   function handleAddCategory(category: string) {
-    console.log(category)
+    console.log(category);
   }
 
-  async function handleAddProduct(product: Product, images: File[]): Promise<ActionResult> {
+  async function handleAddProduct(
+    product: Product,
+    images: File[]
+  ): Promise<ActionResult> {
     const res: ActionResult = {
-      status: 'success',
-      message: 'Product was added succesfully'
-    }
+      status: "success",
+      message: "Product was added succesfully",
+    };
     try {
       await productService.addProduct(product, images);
     } catch (e) {
       if (typeof e === "string") {
-        res.message = e
-        res.status = "error"
+        res.message = e;
+        res.status = "error";
       }
     }
     return res;
@@ -43,7 +46,7 @@ const ProductsTab = () => {
 
   function openModal(form: JSX.Element) {
     formRef.current = form;
-    setModalIsVisible(true)
+    setModalIsVisible(true);
   }
 
   return (
@@ -57,13 +60,6 @@ const ProductsTab = () => {
           >
             Add product
           </Button>
-          <Button
-            variant="contained"
-            sx={{ color: "white" }}
-            onClick={() => openModal(categoryForm)}
-          >
-            Add category
-          </Button>
         </ButtonGroup>
       </div>
       <Products />
@@ -73,9 +69,7 @@ const ProductsTab = () => {
         onClose={() => setModalIsVisible(false)}
       >
         <Container maxWidth="sm" sx={{ mb: 4 }}>
-          <Paper sx={{}}>
-            {formRef.current}
-          </Paper>
+          <Paper sx={{}}>{formRef.current}</Paper>
         </Container>
       </Modal>
     </Stack>

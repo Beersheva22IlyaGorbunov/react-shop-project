@@ -9,6 +9,7 @@ const useProduct = (id?: string): [boolean, string, Product?] => {
 
   useEffect(() => {
     setIsLoading(true);
+    setError("")
     if (id) {
       productService
         .getProductById(id)

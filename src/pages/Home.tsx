@@ -47,6 +47,7 @@ const Home = () => {
         <Grid container spacing={2} columns={12}>
           <Grid item xs={6} sm={4} md={3}>
             <ProductCard
+              inCart={0}
               product={{
                 id: "1",
                 name: "Example",
@@ -59,6 +60,7 @@ const Home = () => {
           </Grid>
           <Grid item xs={6} sm={4} md={3}>
             <ProductCard
+              inCart={0}
               product={{
                 id: "1",
                 name: "Example",
@@ -71,6 +73,7 @@ const Home = () => {
           </Grid>
           <Grid item xs={6} sm={4} md={3}>
             <ProductCard
+              inCart={0}
               product={{
                 id: "1",
                 name: "Example",
@@ -83,6 +86,7 @@ const Home = () => {
           </Grid>
           <Grid item xs={6} sm={4} md={3}>
             <ProductCard
+              inCart={0}
               product={{
                 id: "1",
                 name: "Example",
@@ -100,6 +104,7 @@ const Home = () => {
         <Grid container spacing={2} columns={12}>
           <Grid item xs={6} sm={4} md={3}>
             <ProductCard
+              inCart={0}
               product={{
                 id: "1",
                 name: "Example",
@@ -112,6 +117,7 @@ const Home = () => {
           </Grid>
           <Grid item xs={6} sm={4} md={3}>
             <ProductCard
+              inCart={0}
               product={{
                 id: "1",
                 name: "Example",
@@ -124,6 +130,7 @@ const Home = () => {
           </Grid>
           <Grid item xs={6} sm={4} md={3}>
             <ProductCard
+              inCart={0}
               product={{
                 id: "1",
                 name: "Example",
@@ -136,6 +143,7 @@ const Home = () => {
           </Grid>
           <Grid item xs={6} sm={4} md={3}>
             <ProductCard
+              inCart={0}
               product={{
                 id: "1",
                 name: "Example",

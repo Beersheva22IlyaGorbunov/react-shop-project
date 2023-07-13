@@ -1,16 +1,39 @@
 import React from "react";
 import Product from "../model/Product";
-import { Card, CardContent, CardMedia, Typography } from "@mui/material";
+import {
+  Card,
+  CardActionArea,
+  CardActions,
+  CardContent,
+  CardMedia,
+  Typography,
+} from "@mui/material";
+import AddToCartButton from "./AddToCartButton";
+import { useDispatch } from "react-redux";
+import { updateCartItem } from "../redux/slices/CartSlice";
+import { useAuthSelector, useCartItemSelector } from "../redux/store";
+import { cartService } from "../config/servicesConfig";
 
 type Props = {
   product: Product;
+  inCart: number;
   onClickFn?: () => void;
 };
 
 const placeholderUrl =
   "https://storage.googleapis.com/proudcity/mebanenc/uploads/2021/03/placeholder-image.png";
 
-const ProductCard: React.FC<Props> = ({ product, onClickFn }) => {
+const ProductCard: React.FC<Props> = ({ product, inCart, onClickFn }) => {
+  const dispatch = useDispatch();
+  const user = useAuthSelector();
+  const quantity = useCartItemSelector(product.id!)
+  console.log(quantity)
+
+  function handleCartQuantityChange(newQuantity: number): void {
+    cartService.setCart(user?.uid || "", product.id!, newQuantity)
+    dispatch(updateCartItem({id: product.id!, quantity: newQuantity}))
+  }
+
   return (
     <Card onClick={onClickFn}>
       <CardMedia
@@ -19,12 +42,15 @@ const ProductCard: React.FC<Props> = ({ product, onClickFn }) => {
         image={product.imgLinks[0] ?? placeholderUrl}
         alt={product.name}
       />
-      <CardContent>
+      <CardContent sx={{ p: 1 }}>
         <Typography>{product.name}</Typography>
         <Typography variant="body1" textAlign="end">
           {product.price}
         </Typography>
       </CardContent>
+      <CardActions onClick={(e) => e.stopPropagation()}>
+        <AddToCartButton count={quantity} onClick={handleCartQuantityChange} />
+      </CardActions>
     </Card>
   );
 };

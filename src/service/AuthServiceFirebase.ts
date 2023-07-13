@@ -47,6 +47,7 @@ export default class AuthServiceFirebase implements AuthService {
           : await this.loginWithExternalProvider(providerName);
       userData = {
         email: loginData.email,
+        uid: userCredentials.user.uid,
         role: (await this.isAdmin(userCredentials.user.uid)) ? "admin" : "user",
       };
     } catch (e) {

@@ -15,6 +15,8 @@ import {
 import React, { useState } from "react";
 import Product from "../../model/Product";
 import ActionResult from "../../model/ActionResult";
+import Category from "../../model/Category";
+import useCategories from "../../hooks/useCategories";
 
 type Props = {
   onSubmit: (product: Product, images: File[]) => Promise<ActionResult>;
@@ -30,8 +32,8 @@ const emptyProduct: Product = {
 };
 
 const ProductForm: React.FC<Props> = ({ onSubmit, initial = emptyProduct }) => {
-  const categories = ["Spring", "Celebrations"];
   const [product, setProduct] = useState<Product>(initial);
+  const [isLoading, categoriesError, categories] = useCategories()
   const [files, setFiles] = useState<File[]>([]);
   const [error, setError] = useState<string>("");
 
@@ -163,8 +165,8 @@ const ProductForm: React.FC<Props> = ({ onSubmit, initial = emptyProduct }) => {
             >
               {categories.map((category) => {
                 return (
-                  <MenuItem key={category} value={category}>
-                    {category}
+                  <MenuItem key={category.id} value={category.name}>
+                    {category.name}
                   </MenuItem>
                 );
               })}

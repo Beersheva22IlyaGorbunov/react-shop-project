@@ -1,5 +1,9 @@
 import AuthService from "../service/AuthService";
 import AuthServiceFirebase from "../service/AuthServiceFirebase";
+import CartService from "../service/CartService";
+import CartServiceFire from "../service/CartServiceFire";
+import CategoryService from "../service/CategoryService";
+import CategoryServiceFire from "../service/CategoryServiceFire";
 import ClientService from "../service/ClientService";
 import ClientServiceFire from "../service/ClientServiceFire";
 import ProductService from "../service/ProductService";
@@ -11,3 +15,5 @@ export const productService: ProductService = new ProductServiceFire();
 export const authService: AuthService = new AuthServiceFirebase();
 export const clientService: ClientService = new ClientServiceFire();
 export const settingService: SettingsService = new SettingsServiceFire();
+export const cartService: CartService = new CartServiceFire();
+export const categoryService: CategoryService = new CategoryServiceFire();

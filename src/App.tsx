@@ -5,12 +5,18 @@ import Home from "./pages/Home";
 import Catalog from "./pages/Catalog";
 import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 import Admin from "./pages/Admin";
-import { useAuthSelector } from "./redux/store";
+import { useAuthSelector, useCartSelector } from "./redux/store";
 import MenuPoint from "./model/MenuPoint";
 import SignOut from "./pages/SignOut";
 import Orders from "./pages/Orders";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
+import Cart from "./pages/Cart";
+import { useDispatch } from "react-redux";
+import { cartService } from "./config/servicesConfig";
+import { useEffect } from "react";
+import { setCart } from "./redux/slices/CartSlice";
+import { AnyAction } from "@reduxjs/toolkit";
 
 const menuPoints: MenuPoint[] = [
   {
@@ -46,13 +52,13 @@ const authMenuPoints: MenuPoint[] = [
     path: "orders",
     forRoles: ["admin", "user"],
   },
-  // {
-  //   title: "Profile",
-  //   element: <Profile />,
-  //   order: 2,
-  //   path: "profile",
-  //   forRoles: ["admin", "user", null],
-  // },
+  {
+    title: "Cart",
+    element: <Cart />,
+    order: 2,
+    path: "cart",
+    forRoles: ["admin", "user"],
+  },
   {
     title: "Signout",
     element: <SignOut />,
@@ -122,8 +128,19 @@ function getMenuPoints(role: string | null): MenuPoint[] {
     });
 }
 
+async function initializeCart(uid: string, dispatchFn: (action: AnyAction) => void) {
+  cartService.getCart(uid).then((cart) => dispatchFn(setCart(cart))).catch()
+}
+
+
 function App() {
   const user = useAuthSelector();
+  const dispatch = useDispatch();
+  
+  useEffect(() => {
+    initializeCart(user?.uid || "", dispatch)
+  }, [])
+
   const currentPoints: MenuPoint[] = getMenuPoints(
     user != null ? user.role : null
   );

@@ -1,12 +1,22 @@
 import { Person } from "@mui/icons-material";
-import { Avatar, Box, Divider, Menu, MenuItem } from "@mui/material";
+import {
+  Avatar,
+  Badge,
+  Box,
+  Divider,
+  IconButton,
+  Menu,
+  MenuItem,
+} from "@mui/material";
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuthSelector } from "../../redux/store";
+import { useAuthSelector, useCartSelector } from "../../redux/store";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 
 const UserMenu = () => {
   const user = useAuthSelector();
   const navigate = useNavigate();
+  const cart = useCartSelector();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -14,9 +24,8 @@ const UserMenu = () => {
     if (user) {
       setAnchorEl(event.currentTarget);
     } else {
-      navigate("signin")
+      navigate("signin");
     }
-    
   };
   const handleClose = () => {
     setAnchorEl(null);
@@ -24,37 +33,51 @@ const UserMenu = () => {
 
   function handleLogout() {
     handleClose();
-    navigate("signout")
+    navigate("signout");
   }
 
   return (
-    <div>
-      <div onClick={handleClick} style={{borderRadius: "100%", cursor: "pointer"}}>
-      <Avatar >
-        <Person/>
-      </Avatar>
+    <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+      <IconButton onClick={() => navigate("/cart")}>
+        <Badge
+          badgeContent={Object.values(cart).reduce((accum, val) => accum + val, 0)}
+          color="secondary"
+          max={9}
+        >
+          <ShoppingCartIcon color="primary" />
+        </Badge>
+      </IconButton>
+      <div
+        onClick={handleClick}
+        style={{ borderRadius: "100%", cursor: "pointer" }}
+      >
+        <Avatar>
+          <Person />
+        </Avatar>
       </div>
       <Menu
         id="basic-menu"
         anchorEl={anchorEl}
         anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'right',
+          vertical: "bottom",
+          horizontal: "right",
         }}
         transformOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
+          vertical: "top",
+          horizontal: "right",
         }}
         open={open}
         onClose={handleClose}
         MenuListProps={{
-          'aria-labelledby': 'basic-button',
+          "aria-labelledby": "basic-button",
         }}
       >
         <MenuItem onClick={handleClose}>Profile</MenuItem>
         <MenuItem onClick={handleClose}>My orders</MenuItem>
         <Divider />
-        <MenuItem onClick={handleLogout}><Link to="signout">Logout</Link></MenuItem>
+        <MenuItem onClick={handleLogout}>
+          <Link to="signout">Logout</Link>
+        </MenuItem>
       </Menu>
     </div>
   );

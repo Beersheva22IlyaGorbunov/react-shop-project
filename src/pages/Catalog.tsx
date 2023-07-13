@@ -22,9 +22,10 @@ const Catalog = () => {
                 <CatalogSkeleton />
               ) : (
                 products.map((product) => (
-                  <Grid key={product.id} item xs={3}>
+                  <Grid key={product.id} item xs={6} sm={4} md={3} lg={2}>
                     <ProductCard
                       product={product}
+                      inCart={0}
                       onClickFn={() => navigate(`/catalog/${product.id}`)}
                     />
                   </Grid>

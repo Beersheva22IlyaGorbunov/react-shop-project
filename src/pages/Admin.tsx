@@ -8,6 +8,7 @@ import ClientsTab from "../components/adminPage/ClientsTab";
 import GeneralSettingsTab from "../components/adminPage/GeneralSettingsTab";
 import MenuPoint from "../model/MenuPoint";
 import ErrorPage from "./ErrorPage";
+import CategoriesTab from "../components/adminPage/CategoriesTab";
 
 const menuPoints: MenuPoint[] = [
   {
@@ -15,6 +16,13 @@ const menuPoints: MenuPoint[] = [
     element: <GeneralSettingsTab />,
     order: 1,
     path: "",
+    forRoles: ["admin"],
+  },
+  {
+    title: "Categories",
+    element: <CategoriesTab />,
+    order: 2,
+    path: "categories",
     forRoles: ["admin"],
   },
   {

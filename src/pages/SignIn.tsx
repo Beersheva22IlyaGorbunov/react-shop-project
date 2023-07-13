@@ -3,7 +3,7 @@ import SignInForm from "../components/forms/SignInForm";
 import ActionResult from "../model/ActionResult";
 import LoginData from "../model/service/LoginData";
 import { Box, Button, Divider, IconButton, Typography } from "@mui/material";
-import { authService } from "../config/servicesConfig";
+import { authService, cartService } from "../config/servicesConfig";
 import UserData from "../model/service/UserData";
 import { signIn } from "../redux/slices/AuthSlice";
 import { useDispatch } from "react-redux";
