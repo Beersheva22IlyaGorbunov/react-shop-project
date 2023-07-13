@@ -5,15 +5,15 @@ import { Link, Route, Routes } from "react-router-dom";
 import ProductsTab from "../components/adminPage/ProductsTab";
 import SideTabsNavigator from "../components/adminPage/SideTabsNavigator";
 import ClientsTab from "../components/adminPage/ClientsTab";
-import GeneralSettingsTab from "../components/adminPage/GeneralSettingsTab";
 import MenuPoint from "../model/MenuPoint";
 import ErrorPage from "./ErrorPage";
 import CategoriesTab from "../components/adminPage/CategoriesTab";
+import MainPageSettingsTab from "../components/adminPage/MainPageSettingsTab";
 
 const menuPoints: MenuPoint[] = [
   {
-    title: "General",
-    element: <GeneralSettingsTab />,
+    title: "Main page",
+    element: <MainPageSettingsTab />,
     order: 1,
     path: "",
     forRoles: ["admin"],

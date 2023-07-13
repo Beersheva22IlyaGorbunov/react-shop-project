@@ -46,6 +46,7 @@ export default class ProductServiceFire implements ProductService {
   }
 
   async getProductById(id: string): Promise<Product> {
+    console.log(id)
     const docRef = getDocRef(this.collectionRef, id);
     try {
       const productsSnapshot = await getDoc(docRef);
@@ -55,6 +56,13 @@ export default class ProductServiceFire implements ProductService {
       const errorMessage = this.getErrorMsg(firebaseError);
       throw errorMessage;
     }
+  }
+
+  async getProductsById(ids: string[]): Promise<Product[]> {
+    const promises = ids.map((id) => {
+      console.log(ids, id)
+      return this.getProductById(id)});
+    return await Promise.all(promises)
   }
 
   getProductsRx(): Observable<string | Product[]> {

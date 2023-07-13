@@ -11,7 +11,7 @@ import React, { useState } from "react";
 import { settingService } from "../../config/servicesConfig";
 import useSettings from "../../hooks/useSettings";
 
-const GeneralSettingsTab = () => {
+const MainPageSettingsTab = () => {
   const settings = useSettings();
   const [title, setTitle] = useState<string>(settings?.title || "");
   const [subtitle, setSubtitle] = useState<string>(settings?.subtitle || "");
@@ -42,7 +42,7 @@ const GeneralSettingsTab = () => {
 
   return (
     <Paper sx={{ p: 2 }}>
-      <Typography variant="h5" mb={2}>General settings</Typography>
+      <Typography variant="h5" mb={2}>Main page settings</Typography>
       <Box component={"form"} onSubmit={handleSubmit}>
         <Grid container spacing={2}>
           <Grid item xs={6}>
@@ -108,4 +108,4 @@ const GeneralSettingsTab = () => {
   );
 };
 
-export default GeneralSettingsTab;
+export default MainPageSettingsTab;

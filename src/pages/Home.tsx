@@ -3,9 +3,23 @@ import React from "react";
 import ProductCard from "../components/ProductCard";
 import useSettings from "../hooks/useSettings";
 import { title } from "process";
+import useProducts from "../hooks/useProducts";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
+  const navigate = useNavigate()
   const settings = useSettings();
+  const slot: any = [
+    "Popular",
+    [
+      "14f30abf-2ee9-4b33-93f8-f21a2c15125f",
+      "20de8c1d-679b-4202-9435-5247facd28e6",
+      "24ca8323-0186-4752-ba85-f01f63965e6c",
+      "e638afa6-d5d6-470c-af39-a00c5ed54b0e",
+    ],
+  ];
+  const [isLoading, error, slotsData] = useProducts(slot[1]);
+  console.log(slotsData)
   // const title = "Flowers shop";
   // const subTitle = "We are working for you since 2015";
   // const backgroundImgUrl =
@@ -42,61 +56,14 @@ const Home = () => {
       </Box>
       <Container maxWidth={"lg"}>
         <Typography variant="h5" my={1}>
-          Popular products
+          {slot[0]}
         </Typography>
         <Grid container spacing={2} columns={12}>
-          <Grid item xs={6} sm={4} md={3}>
-            <ProductCard
-              inCart={0}
-              product={{
-                id: "1",
-                name: "Example",
-                imgLinks: [],
-                category: "",
-                description: "Some description",
-                price: 100,
-              }}
-            />
-          </Grid>
-          <Grid item xs={6} sm={4} md={3}>
-            <ProductCard
-              inCart={0}
-              product={{
-                id: "1",
-                name: "Example",
-                category: "",
-                imgLinks: [],
-                description: "Some description",
-                price: 100,
-              }}
-            />
-          </Grid>
-          <Grid item xs={6} sm={4} md={3}>
-            <ProductCard
-              inCart={0}
-              product={{
-                id: "1",
-                name: "Example",
-                category: "",
-                imgLinks: [],
-                description: "Some description",
-                price: 100,
-              }}
-            />
-          </Grid>
-          <Grid item xs={6} sm={4} md={3}>
-            <ProductCard
-              inCart={0}
-              product={{
-                id: "1",
-                name: "Example",
-                category: "",
-                imgLinks: [],
-                description: "Some description",
-                price: 100,
-              }}
-            />
-          </Grid>
+          {slotsData.map((product) => (
+            <Grid item xs={6} sm={4} md={3}>
+              <ProductCard inCart={0} product={product} onClickFn={() => navigate(`/catalog/${product.id}`)} />
+            </Grid>
+          ))}
         </Grid>
         <Typography variant="h5" my={1}>
           Top categories

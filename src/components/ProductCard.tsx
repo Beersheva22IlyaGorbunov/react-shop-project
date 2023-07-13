@@ -26,12 +26,12 @@ const placeholderUrl =
 const ProductCard: React.FC<Props> = ({ product, inCart, onClickFn }) => {
   const dispatch = useDispatch();
   const user = useAuthSelector();
-  const quantity = useCartItemSelector(product.id!)
-  console.log(quantity)
+  const quantity = useCartItemSelector(product.id!);
+  console.log(quantity);
 
   function handleCartQuantityChange(newQuantity: number): void {
-    cartService.setCart(user?.uid || "", product.id!, newQuantity)
-    dispatch(updateCartItem({id: product.id!, quantity: newQuantity}))
+    cartService.setCart(user?.uid || "", product.id!, newQuantity);
+    dispatch(updateCartItem({ id: product.id!, quantity: newQuantity }));
   }
 
   return (
@@ -42,10 +42,10 @@ const ProductCard: React.FC<Props> = ({ product, inCart, onClickFn }) => {
         image={product.imgLinks[0] ?? placeholderUrl}
         alt={product.name}
       />
-      <CardContent sx={{ p: 1 }}>
+      <CardContent sx={{ p: 1, pb: 0 }}>
         <Typography>{product.name}</Typography>
-        <Typography variant="body1" textAlign="end">
-          {product.price}
+        <Typography variant="body2" textAlign="end">
+          {product.price} ₪
         </Typography>
       </CardContent>
       <CardActions onClick={(e) => e.stopPropagation()}>

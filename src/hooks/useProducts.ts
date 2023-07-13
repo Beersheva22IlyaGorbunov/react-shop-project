@@ -2,21 +2,33 @@ import { useEffect, useState } from "react";
 import Product from "../model/Product";
 import { productService } from "../config/servicesConfig";
 
-const useProducts = (): [boolean, string, Product[]] => {
+const useProducts = (id?: string[]): [boolean, string, Product[]] => {
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState("");
 
+  async function fetchProducts(): Promise<Product[]> {
+    let response: string | Product[] = [];
+    try {
+      if (id === undefined) {
+        response = await productService.getProducts();
+      } else {
+        response = await productService.getProductsById(id);
+      }
+      if (typeof response === "string") {
+        throw response;
+      } else {
+        return response;
+      }
+    } catch (e) {
+      throw e;
+    }
+  }
+
   useEffect(() => {
-    setIsLoading(true)
-    productService
-      .getProducts()
-      .then((res: Product[] | string) => {
-        if (typeof res === "string") {
-        } else {
-          setProducts(res);
-        }
-      })
+    setIsLoading(true);
+    fetchProducts()
+      .then((products) => setProducts(products))
       .catch((err) => setError(err))
       .finally(() => setIsLoading(false));
   }, []);
