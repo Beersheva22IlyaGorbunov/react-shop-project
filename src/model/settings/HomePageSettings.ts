@@ -1,6 +1,7 @@
 type HomePageSettings = {
   title: string;
-  mainImgUrl: string;
+  subtitle: string;
+  bannerUrl: string;
 };
 
 export default HomePageSettings;

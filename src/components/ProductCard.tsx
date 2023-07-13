@@ -4,14 +4,15 @@ import { Card, CardContent, CardMedia, Typography } from "@mui/material";
 
 type Props = {
   product: Product;
+  onClickFn?: () => void;
 };
 
 const placeholderUrl =
   "https://storage.googleapis.com/proudcity/mebanenc/uploads/2021/03/placeholder-image.png";
 
-const ProductCard: React.FC<Props> = ({ product }) => {
+const ProductCard: React.FC<Props> = ({ product, onClickFn }) => {
   return (
-    <Card>
+    <Card onClick={onClickFn}>
       <CardMedia
         component="img"
         sx={{ maxHeight: "180", aspectRatio: "1/1" }}

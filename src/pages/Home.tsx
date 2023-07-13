@@ -1,17 +1,20 @@
 import { Box, Container, Grid, Stack, Typography } from "@mui/material";
 import React from "react";
 import ProductCard from "../components/ProductCard";
+import useSettings from "../hooks/useSettings";
+import { title } from "process";
 
 const Home = () => {
-  const title = "Flowers shop";
-  const subTitle = "We are working for you since 2015";
-  const backgroundImgUrl =
-    "https://images.squarespace-cdn.com/content/v1/57451c424c2f85ae9b18f48d/ddcb7ab1-22ab-49dd-8da9-9b3b054393a5/Claudia+Lapena+-+4A4B169D-B766-409B-BD76-AAC2590167F7.jpeg";
+  const settings = useSettings();
+  // const title = "Flowers shop";
+  // const subTitle = "We are working for you since 2015";
+  // const backgroundImgUrl =
+  //   "https://images.squarespace-cdn.com/content/v1/57451c424c2f85ae9b18f48d/ddcb7ab1-22ab-49dd-8da9-9b3b054393a5/Claudia+Lapena+-+4A4B169D-B766-409B-BD76-AAC2590167F7.jpeg";
   return (
     <Box mt={-8}>
       <Box
         sx={{
-          backgroundImage: `url(${backgroundImgUrl})`,
+          backgroundImage: `url(${settings?.bannerUrl})`,
           backgroundPosition: "center",
           backgroundSize: "cover",
         }}
@@ -21,19 +24,21 @@ const Home = () => {
         flexDirection="column"
         alignItems="center"
       >
-        <Stack
-          spacing={1}
-          sx={{
-            color: "white",
-            backgroundColor: "rgba(0, 0, 0, .3)",
-            backdropFilter: "blur(3px)",
-            borderRadius: 2,
-            padding: 2,
-          }}
-        >
-          <Typography variant="h2">{title}</Typography>
-          <Typography variant="h4">{subTitle}</Typography>
-        </Stack>
+        {settings?.title && settings.subtitle && (
+          <Stack
+            spacing={1}
+            sx={{
+              color: "white",
+              backgroundColor: "rgba(0, 0, 0, .3)",
+              backdropFilter: "blur(3px)",
+              borderRadius: 2,
+              padding: 2,
+            }}
+          >
+            <Typography variant="h2">{settings?.title}</Typography>
+            <Typography variant="h4">{settings?.subtitle}</Typography>
+          </Stack>
+        )}
       </Box>
       <Container maxWidth={"lg"}>
         <Typography variant="h5" my={1}>
@@ -147,7 +152,7 @@ const Home = () => {
           width="100%"
           height="400"
           title="Google maps"
-          style={{border: 0}}
+          style={{ border: 0 }}
           loading="lazy"
         ></iframe>
       </Container>

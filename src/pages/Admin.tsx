@@ -7,6 +7,7 @@ import SideTabsNavigator from "../components/adminPage/SideTabsNavigator";
 import ClientsTab from "../components/adminPage/ClientsTab";
 import GeneralSettingsTab from "../components/adminPage/GeneralSettingsTab";
 import MenuPoint from "../model/MenuPoint";
+import ErrorPage from "./ErrorPage";
 
 const menuPoints: MenuPoint[] = [
   {
@@ -29,7 +30,7 @@ const menuPoints: MenuPoint[] = [
     order: 3,
     path: "clients",
     forRoles: ["admin"],
-  }
+  },
 ];
 
 function getMenuPoints(role: string | null): JSX.Element[] {
@@ -48,9 +49,10 @@ function getMenuPoints(role: string | null): JSX.Element[] {
 const Admin = () => {
   return (
     <Routes>
-      <Route path="/" element={<SideTabsNavigator menuPoints={menuPoints}/>}>
+      <Route path="/" element={<SideTabsNavigator menuPoints={menuPoints} />}>
         {getMenuPoints("admin")}
       </Route>
+      <Route path="*" element={<ErrorPage />} />
     </Routes>
   );
 };

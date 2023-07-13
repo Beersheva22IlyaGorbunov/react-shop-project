@@ -12,6 +12,8 @@ import {
   DocumentReference,
   doc,
   setDoc,
+  getDoc,
+  DocumentSnapshot,
 } from "firebase/firestore";
 import {
   ref,
@@ -22,6 +24,7 @@ import {
 } from "firebase/storage";
 import firestoreApp from "../config/firebaseConfig";
 import { getDocRef } from "../utils/firebase";
+import { FirebaseError } from "firebase/app";
 
 const PRODUCTS_COLLECTION_NAME = "products";
 
@@ -36,17 +39,29 @@ export default class ProductServiceFire implements ProductService {
     const productsSnapshot = await getDocs(this.collectionRef);
     const products: Product[] = [];
     productsSnapshot.forEach((productSnapshot) => {
-      const product: Product = this.getProduct(productSnapshot);
+      const product: Product = this.convertToProduct(productSnapshot);
       products.push(product);
     });
     return products;
   }
 
+  async getProductById(id: string): Promise<Product> {
+    const docRef = getDocRef(this.collectionRef, id);
+    try {
+      const productsSnapshot = await getDoc(docRef);
+      return this.convertToProduct(productsSnapshot);
+    } catch (err: any) {
+      const firebaseError: FirebaseError = err;
+      const errorMessage = this.getErrorMsg(firebaseError);
+      throw errorMessage;
+    }
+  }
+
   getProductsRx(): Observable<string | Product[]> {
     return collectionData(this.collectionRef).pipe(
       catchError((err) => {
-        const firestoreError: FirestoreError = err;
-        const errorMessage = this.getErrorMsg(firestoreError);
+        const firebaseError: FirebaseError = err;
+        const errorMessage = this.getErrorMsg(firebaseError);
         return of(errorMessage);
       }),
       map((products) => {
@@ -67,8 +82,8 @@ export default class ProductServiceFire implements ProductService {
     try {
       await setDoc(docRef, product);
     } catch (err: any) {
-      const firestoreError: FirestoreError = err;
-      const errorMessage = this.getErrorMsg(firestoreError);
+      const firebaseError: FirebaseError = err;
+      const errorMessage = this.getErrorMsg(firebaseError);
       throw errorMessage;
     }
     return product;
@@ -93,7 +108,7 @@ export default class ProductServiceFire implements ProductService {
     throw new Error("Method not implemented.");
   }
 
-  private getErrorMsg(error: FirestoreError): string {
+  private getErrorMsg(error: FirebaseError): string {
     let errMsg = error.message;
     switch (error.code) {
       case "unauthenticated":
@@ -109,15 +124,20 @@ export default class ProductServiceFire implements ProductService {
     return errMsg;
   }
 
-  private getProduct(snapshot: QueryDocumentSnapshot): Product {
-    console.log(snapshot);
+  private convertToProduct(
+    snapshot: QueryDocumentSnapshot | DocumentSnapshot
+  ): Product {
+    const data = snapshot.data();
+    if (!data) {
+      throw new FirebaseError("not-found", "Product not found");
+    }
     return {
       id: snapshot.id,
-      name: snapshot.data().name,
-      imgLinks: snapshot.data().imgLinks,
-      category: snapshot.data().category,
-      description: snapshot.data().description,
-      price: snapshot.data().price,
+      name: data.name,
+      imgLinks: data.imgLinks,
+      category: data.category,
+      description: data.description,
+      price: data.price,
     };
   }
 }

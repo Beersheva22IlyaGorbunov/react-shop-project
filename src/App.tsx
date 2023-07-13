@@ -23,6 +23,7 @@ const menuPoints: MenuPoint[] = [
   {
     title: "Catalog",
     element: <Catalog />,
+    hasChilds: true,
     order: 2,
     path: "catalog",
     forRoles: ["admin", "user", null],
@@ -137,7 +138,6 @@ function App() {
             element={<NavigatorDispatcher menuPoints={currentPoints} />}
           >
             {routesFromPoints(currentPoints)}
-            {user && routesFromPoints(authMenuPoints)}
             {routesFromPoints(user ? authMenuPoints : anonimMenuPoints)}
             <Route
               path="*"
