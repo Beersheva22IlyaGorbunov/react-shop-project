@@ -5,10 +5,12 @@ import useSettings from "../hooks/useSettings";
 import { title } from "process";
 import useProducts from "../hooks/useProducts";
 import { useNavigate } from "react-router-dom";
+import { useCartSelector } from "../redux/store";
 
 const Home = () => {
   const navigate = useNavigate()
   const settings = useSettings();
+  const cart = useCartSelector();
   const slot: any = [
     "Popular",
     [
@@ -60,8 +62,8 @@ const Home = () => {
         </Typography>
         <Grid container spacing={2} columns={12}>
           {slotsData.map((product) => (
-            <Grid item xs={6} sm={4} md={3}>
-              <ProductCard inCart={0} product={product} onClickFn={() => navigate(`/catalog/${product.id}`)} />
+            <Grid key={product.id} item xs={6} sm={4} md={3}>
+              <ProductCard inCart={cart[product.id!] || 0} product={product} onClickFn={() => navigate(`/catalog/${product.id}`)} />
             </Grid>
           ))}
         </Grid>

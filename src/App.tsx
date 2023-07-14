@@ -129,7 +129,13 @@ function getMenuPoints(role: string | null): MenuPoint[] {
 }
 
 async function initializeCart(uid: string, dispatchFn: (action: AnyAction) => void) {
-  cartService.getCart(uid).then((cart) => dispatchFn(setCart(cart))).catch()
+  cartService.getCartRx(uid).subscribe({
+    next: (cart) => {
+      if (typeof cart !== "string") {
+        dispatchFn(setCart(cart))
+      }
+    }
+  })
 }
 
 

@@ -5,8 +5,10 @@ import {
   Divider,
   Drawer,
   IconButton,
+  SxProps,
   Tab,
   Tabs,
+  Theme,
   Typography,
 } from "@mui/material";
 import { ChevronLeft, Menu } from "@mui/icons-material";
@@ -17,6 +19,21 @@ type Props = {
   selectedTab: number;
   tabChangeFn: (tabIndex: number) => void;
 };
+
+const headerStyle: SxProps<Theme> = {
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "space-between",
+  alignItems: "center",
+  backgroundColor: "rgba(0, 0, 0, .5)",
+  backdropFilter: "blur(3px)",
+  mt: 1,
+  px: 2,
+  // borderRadius: 4,
+  mx: "auto",
+  width: "100%",
+};
+
 const NavigatorPortrait: React.FC<Props> = ({
   menuPoints,
   selectedTab,
@@ -53,23 +70,18 @@ const NavigatorPortrait: React.FC<Props> = ({
     <>
       <AppBar
         color="inherit"
-        sx={{
-          backgroundColor: "lightgray",
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-          pl: 2,
-          pr: 2,
-        }}
+        sx={headerStyle}
+        position="sticky"
       >
         <IconButton
           aria-label="open drawer"
           onClick={handleDrawerOpen}
           edge="start"
+          color="primary"
         >
-          <Menu />
+          <Menu fontSize="large"/>
         </IconButton>
-        <Typography sx={{ ml: "auto", mr: "auto", pr: 3 }} variant="h6">
+        <Typography sx={{ ml: "auto", mr: "auto", pr: 3, py: 1.5, color: "white" }} variant="h6">
           {menuPoints[selectedTab]?.title ?? ""}
         </Typography>
       </AppBar>

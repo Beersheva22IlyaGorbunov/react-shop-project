@@ -14,11 +14,21 @@ import ProductDetails from "./ProductDetails";
 import ErrorPage from "./ErrorPage";
 import useCategories from "../hooks/useCategories";
 import Product from "../model/Product";
+import { useCartSelector } from "../redux/store";
+import Cart from "../model/Cart";
 
-function getCategoryView(
-  [category, products]: [string, Product[]],
-  navigateFn: NavigateFunction
-): JSX.Element {
+type CatViewProps = {
+  productsInCategory: [string, Product[]];
+  cart: Cart;
+  navigateFn: NavigateFunction;
+};
+
+const CategoryView: React.FC<CatViewProps> = ({
+  productsInCategory,
+  cart,
+  navigateFn,
+}) => {
+  const [category, products] = productsInCategory;
   return (
     <>
       <Grid item xs={12}>
@@ -28,18 +38,20 @@ function getCategoryView(
         <Grid key={product.id} item xs={6} sm={4} md={3} lg={2}>
           <ProductCard
             product={product}
-            inCart={0}
+            inCart={cart[product.id!] || 0}
             onClickFn={() => navigateFn(`/catalog/${product.id}`)}
           />
         </Grid>
       ))}
     </>
   );
-}
+};
 
 const Catalog = () => {
   const [isLoading, error, products] = useProducts();
   const navigate = useNavigate();
+  const cart = useCartSelector();
+
   const productsInCategories = useMemo(() => {
     const resObj: { [key: string]: [Product] } = products.reduce<{
       [key: string]: [Product];
@@ -64,9 +76,14 @@ const Catalog = () => {
               {isLoading ? (
                 <CatalogSkeleton />
               ) : (
-                productsInCategories.map((elem) =>
-                  getCategoryView(elem, navigate)
-                )
+                productsInCategories.map((categoryProducts) => (
+                  <CategoryView
+                    key={categoryProducts[0]}
+                    productsInCategory={categoryProducts}
+                    cart={cart}
+                    navigateFn={navigate}
+                  />
+                ))
               )}
             </Grid>
           </Container>

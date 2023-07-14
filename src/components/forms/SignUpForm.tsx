@@ -52,10 +52,13 @@ const SignUpForm: React.FC<Props> = ({ onSignUp }) => {
     event.preventDefault();
     setIsLoading(true);
     try {
-      const res = await onSignUp(loginData, client);
+      const res = await onSignUp(loginData, {
+        ...client,
+        address: addressIsOpened ? client.address : undefined,
+      });
       setLoginRes(res);
     } catch (e) {
-      console.log(e)
+      console.log(e);
     }
     setIsLoading(false);
   };
@@ -106,37 +109,37 @@ const SignUpForm: React.FC<Props> = ({ onSignUp }) => {
 
   function handleCityChange(e: React.ChangeEvent<HTMLInputElement>) {
     const city = e.target.value;
-    const address = { ...client.address, city};
+    const address = { ...client.address, city };
     setClient((prev) => ({
       ...prev,
-      address: address as Address
+      address: address as Address,
     }));
   }
 
   function handleCountryChange(e: React.ChangeEvent<HTMLInputElement>) {
     const country = e.target.value;
-    const address = { ...client.address, country};
+    const address = { ...client.address, country };
     setClient((prev) => ({
       ...prev,
-      address: address as Address
+      address: address as Address,
     }));
   }
 
   function handleStreetChange(e: React.ChangeEvent<HTMLInputElement>) {
     const street = e.target.value;
-    const address = { ...client.address, street};
+    const address = { ...client.address, street };
     setClient((prev) => ({
       ...prev,
-      address: address as Address
+      address: address as Address,
     }));
   }
 
   function handleBuildingChange(e: React.ChangeEvent<HTMLInputElement>) {
     const building = e.target.value;
-    const address = { ...client.address, building};
+    const address = { ...client.address, building };
     setClient((prev) => ({
       ...prev,
-      address: address as Address
+      address: address as Address,
     }));
   }
 

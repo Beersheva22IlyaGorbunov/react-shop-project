@@ -1,9 +1,125 @@
-import React from 'react'
+import {
+  Avatar,
+  Box,
+  Button,
+  Container,
+  Divider,
+  Grid,
+  IconButton,
+  List,
+  ListItem,
+  Paper,
+  Typography,
+} from "@mui/material";
+import React, { useMemo } from "react";
+import { useCartSelector } from "../redux/store";
+import useProducts from "../hooks/useProducts";
+import Product from "../model/Product";
+import { Delete } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
-const Cart = () => {
+type CartItemModel = Product & { quantity: number };
+
+function CartItem({
+  cartItem,
+  dividerBefore = false,
+  onClickFn,
+}: {
+  cartItem: CartItemModel;
+  dividerBefore?: boolean;
+  onClickFn: () => void;
+}): JSX.Element {
   return (
-    <div>Cart</div>
-  )
+    <>
+      {dividerBefore && <Divider />}
+      <ListItem
+        sx={{ display: "flex", flexDirection: "row", alignItems: "center" }}
+      >
+        <div style={{ display: "flex", cursor: "pointer" }} onClick={onClickFn}>
+          <Avatar
+            sx={{ width: 48, height: 48, mr: 2 }}
+            src={cartItem.imgLinks[0]}
+            alt={cartItem.name}
+          />
+          <div>
+            <Typography variant="h6">{cartItem.name}</Typography>
+            <Typography variant="body2">{cartItem.category}</Typography>
+          </div>
+        </div>
+        <div
+          style={{
+            marginInlineStart: "auto",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <div>
+            <Typography>Price: {cartItem.price}</Typography>
+          </div>
+
+          <IconButton>
+            <Delete color="warning" />
+          </IconButton>
+        </div>
+      </ListItem>
+    </>
+  );
 }
 
-export default Cart
+function getItemsTotal(products: CartItemModel[]): number {
+  return products.reduce((accum, item) => (accum += item.quantity), 0);
+}
+
+function getPriceTotal(products: CartItemModel[]): number {
+  return products.reduce(
+    (accum, item) => (accum += item.price * item.quantity),
+    0
+  );
+}
+
+const Cart = () => {
+  const navigate = useNavigate();
+  const cart = useCartSelector();
+  const [isLoading, error, products] = useProducts(Object.keys(cart));
+  const productsInCart: Array<CartItemModel> = useMemo(() => {
+    return products.map((product) => ({
+      ...product,
+      quantity: cart[product.id!],
+    }));
+  }, [products, cart]);
+
+  return (
+    <Container sx={{ mt: 2 }}>
+      <Grid container spacing={2}>
+        <Grid item xs={9}>
+          <Paper sx={{ p: 2 }}>
+            <Typography variant="h5">In cart:</Typography>
+            <List>
+              {productsInCart.map((cartItem, index) => (
+                <CartItem
+                  key={cartItem.id}
+                  dividerBefore={index !== 0}
+                  cartItem={cartItem}
+                  onClickFn={() => navigate(`/catalog/${cartItem.id}`)}
+                />
+              ))}
+            </List>
+          </Paper>
+        </Grid>
+        <Grid item xs={3}>
+          <Paper sx={{ p: 2 }}>
+            <Typography>
+              Subtotal ({getItemsTotal(productsInCart)} items):{" "}
+              {getPriceTotal(productsInCart)}
+            </Typography>
+            <Button size="small" sx={{ mt: 2 }} variant="contained">
+              Proceed order
+            </Button>
+          </Paper>
+        </Grid>
+      </Grid>
+    </Container>
+  );
+};
+
+export default Cart;

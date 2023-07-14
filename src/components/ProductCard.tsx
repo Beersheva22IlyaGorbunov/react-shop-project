@@ -24,14 +24,10 @@ const placeholderUrl =
   "https://storage.googleapis.com/proudcity/mebanenc/uploads/2021/03/placeholder-image.png";
 
 const ProductCard: React.FC<Props> = ({ product, inCart, onClickFn }) => {
-  const dispatch = useDispatch();
   const user = useAuthSelector();
-  const quantity = useCartItemSelector(product.id!);
-  console.log(quantity);
 
   function handleCartQuantityChange(newQuantity: number): void {
     cartService.setCart(user?.uid || "", product.id!, newQuantity);
-    dispatch(updateCartItem({ id: product.id!, quantity: newQuantity }));
   }
 
   return (
@@ -49,7 +45,7 @@ const ProductCard: React.FC<Props> = ({ product, inCart, onClickFn }) => {
         </Typography>
       </CardContent>
       <CardActions onClick={(e) => e.stopPropagation()}>
-        <AddToCartButton count={quantity} onClick={handleCartQuantityChange} />
+        <AddToCartButton count={inCart} onClick={handleCartQuantityChange} />
       </CardActions>
     </Card>
   );

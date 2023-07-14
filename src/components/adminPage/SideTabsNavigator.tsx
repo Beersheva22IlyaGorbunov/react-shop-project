@@ -1,4 +1,4 @@
-import { Container, Grid, Paper, Tab, Tabs } from "@mui/material";
+import { Container, Grid, Paper, Tab, Tabs, useMediaQuery, useTheme } from "@mui/material";
 import React, { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 import MenuPoint from "../../model/MenuPoint";
@@ -9,6 +9,8 @@ type Props = {
 
 const SideTabsNavigator: React.FC<Props> = ({ menuPoints }) => {
   const [value, setValue] = useState<number>(0);
+  const theme = useTheme();
+  const isNarrow = useMediaQuery(theme.breakpoints.down("sm"));
 
   // useEffect(() => {
   //   let index = menuPoints.findIndex(
@@ -24,12 +26,13 @@ const SideTabsNavigator: React.FC<Props> = ({ menuPoints }) => {
   return (
     <Container maxWidth="lg" sx={{ mt: 2 }}>
       <Grid container spacing={1}>
-        <Grid item xs={2}>
+        <Grid item xs={12} sm={3} md={2}>
           <Paper>
             <Tabs
               value={value}
               onChange={(__, newValue) => setValue(newValue)}
-              orientation="vertical"
+              variant="scrollable"
+              orientation={isNarrow ? "horizontal" : "vertical"}
             >
               {menuPoints.map((point) => (
                 <Tab
@@ -43,7 +46,7 @@ const SideTabsNavigator: React.FC<Props> = ({ menuPoints }) => {
             </Tabs>
           </Paper>
         </Grid>
-        <Grid item xs={10}>
+        <Grid item xs={12} sm={9} md={10}>
           <Outlet />
         </Grid>
       </Grid>
