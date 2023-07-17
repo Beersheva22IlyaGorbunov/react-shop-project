@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Product from "../model/Product";
 import { productService } from "../config/servicesConfig";
 
-const useProducts = (id?: string[]): [boolean, string, Product[]] => {
+const useProducts = (id?: string[], dependencies?: any[]): [boolean, string, Product[]] => {
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState("");
@@ -31,7 +31,7 @@ const useProducts = (id?: string[]): [boolean, string, Product[]] => {
       .then((products) => setProducts(products))
       .catch((err) => setError(err))
       .finally(() => setIsLoading(false));
-  }, []);
+  }, dependencies ? dependencies : []);
 
   return [isLoading, error, products];
 };

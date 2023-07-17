@@ -11,7 +11,7 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useAuthSelector, useCartSelector } from "../redux/store";
 import useProducts from "../hooks/useProducts";
 import Product from "../model/Product";
@@ -88,13 +88,17 @@ const Cart = () => {
   const navigate = useNavigate();
   const auth = useAuthSelector();
   const cart = useCartSelector();
-  const [isLoading, error, products] = useProducts(Object.keys(cart));
+  const [isLoading, error, products] = useProducts(Object.keys(cart), [cart]);
   const productsInCart: Array<CartItemModel> = useMemo(() => {
-    return products.map((product) => ({
-      ...product,
-      quantity: cart[product.id!],
-    }));
+    return products
+      .filter((product) => cart[product.id!] !== undefined)
+      .map((product) => ({
+        ...product,
+        quantity: cart[product.id!],
+      }));
   }, [products, cart]);
+
+  useEffect(() => {}, [cart]);
 
   async function placeOrder() {
     if (auth?.uid !== undefined) {
@@ -111,10 +115,10 @@ const Cart = () => {
           clientId: auth.uid,
           products: productsQuantity,
           address: client.address,
-          statuses: {'placed': new Date()},
-          isDelivery: false
+          statuses: { placed: new Date() },
+          isDelivery: false,
         });
-        await cartService.clearCart(auth.uid)
+        await cartService.clearCart(auth.uid);
       } catch (e: any) {
         console.log(e);
       }
@@ -145,7 +149,12 @@ const Cart = () => {
               Subtotal ({getItemsTotal(productsInCart)} items):{" "}
               {getPriceTotal(productsInCart)}
             </Typography>
-            <Button onClick={placeOrder} size="small" sx={{ mt: 2 }} variant="contained">
+            <Button
+              onClick={placeOrder}
+              size="small"
+              sx={{ mt: 2 }}
+              variant="contained"
+            >
               Proceed order
             </Button>
           </Paper>
