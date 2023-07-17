@@ -10,7 +10,6 @@ import {
 import CartService from "./CartService";
 import firestoreApp from "../config/firebaseConfig";
 import Cart from "../model/Cart";
-import { getDocRef } from "../utils/firebase";
 import { FirebaseError } from "firebase/app";
 import FirebaseService from "./FirebaseService";
 import { Observable, catchError, map, of } from "rxjs";
@@ -31,7 +30,7 @@ export default class CartServiceFire
   async setCart(uid: string, id: string, quantity: number): Promise<void> {
     if (uid.length > 0) {
       const userCollectionRef = this.getUserCartRef(uid);
-      const docRef = getDocRef(userCollectionRef, id);
+      const docRef = this.getDocRef(userCollectionRef, id);
       try {
         await setDoc(docRef, { id, quantity });
       } catch (err: any) {
@@ -102,6 +101,5 @@ export default class CartServiceFire
     } else {
       throw "Authentication";
     }
-    throw new Error("Method not implemented.");
   }
 }

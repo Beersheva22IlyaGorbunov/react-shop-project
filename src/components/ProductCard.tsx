@@ -31,7 +31,7 @@ const ProductCard: React.FC<Props> = ({ product, inCart, onClickFn }) => {
   }
 
   return (
-    <Card onClick={onClickFn}>
+    <Card onClick={onClickFn} sx={{cursor: "pointer"}}>
       <CardMedia
         component="img"
         sx={{ maxHeight: "180", aspectRatio: "1/1" }}
@@ -39,7 +39,7 @@ const ProductCard: React.FC<Props> = ({ product, inCart, onClickFn }) => {
         alt={product.name}
       />
       <CardContent sx={{ p: 1, pb: 0 }}>
-        <Typography>{product.name}</Typography>
+        <Typography noWrap>{product.name}</Typography>
         <Typography variant="body2" textAlign="end">
           {product.price} ₪
         </Typography>

@@ -1,8 +1,11 @@
+import { Observable } from "rxjs";
 import Order from "../model/Order";
-import Product from "../model/Product";
-
 
 export default interface OrderService {
-  placeOrder(products: Product[]): Promise<Order>;
-  getOrders(): Promise<Order[]>;
+  placeOrder(order: Order): Promise<Order>;
+  updateOrder(order: Order): Promise<Order>;
+  getUserOrders(uid: string): Promise<Order[]>;
+  getAllOrders(): Promise<Order[]>;
+  getAllOrdersRx(): Observable<Order[] | string>;
+  deleteOrder(uid: string, id: string): Promise<void>;
 }

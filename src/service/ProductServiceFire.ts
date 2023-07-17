@@ -23,17 +23,16 @@ import {
   FirebaseStorage,
 } from "firebase/storage";
 import firestoreApp from "../config/firebaseConfig";
-import { getDocRef } from "../utils/firebase";
 import { FirebaseError } from "firebase/app";
+import FirebaseService from "./FirebaseService";
 
 const PRODUCTS_COLLECTION_NAME = "products";
 
-export default class ProductServiceFire implements ProductService {
+export default class ProductServiceFire extends FirebaseService implements ProductService {
   private readonly collectionRef = collection(
     getFirestore(firestoreApp),
     PRODUCTS_COLLECTION_NAME
   );
-  private readonly storage: FirebaseStorage = getStorage(firestoreApp);
 
   async getProducts(): Promise<string | Product[]> {
     const productsSnapshot = await getDocs(this.collectionRef);
@@ -47,7 +46,7 @@ export default class ProductServiceFire implements ProductService {
 
   async getProductById(id: string): Promise<Product> {
     console.log(id)
-    const docRef = getDocRef(this.collectionRef, id);
+    const docRef = this.getDocRef(this.collectionRef, id);
     try {
       const productsSnapshot = await getDoc(docRef);
       return this.convertToProduct(productsSnapshot);
@@ -82,9 +81,9 @@ export default class ProductServiceFire implements ProductService {
   async addProduct(product: Product, images: File[]): Promise<Product> {
     const newId = uuid();
     product.id = newId;
-    const docRef = getDocRef(this.collectionRef, newId);
+    const docRef = this.getDocRef(this.collectionRef, newId);
     if (images.length > 0) {
-      const urls = await this.uploadImages(images);
+      const urls = await this.uploadImages(images, "images");
       product.imgLinks = urls;
     }
     try {
@@ -97,39 +96,12 @@ export default class ProductServiceFire implements ProductService {
     return product;
   }
 
-  private async uploadImages(images: File[]): Promise<string[]> {
-    const uploadPromises = images.map(async (image) => {
-      const storageRef = ref(this.storage, `/images/${image.name}`);
-      return uploadBytes(storageRef, image);
-    });
-    const uploadResults = await Promise.all(uploadPromises);
-    const urlsPromises = uploadResults.map((res) => getDownloadURL(res.ref));
-    const urls = await Promise.all(urlsPromises);
-    return urls;
-  }
-
   deleteProduct(id: string): Promise<void> {
     throw new Error("Method not implemented.");
   }
 
   updateProduct(updatedProduct: Product): Promise<Product> {
     throw new Error("Method not implemented.");
-  }
-
-  private getErrorMsg(error: FirebaseError): string {
-    let errMsg = error.message;
-    switch (error.code) {
-      case "unauthenticated":
-      case "permission-denied": {
-        errMsg = "Authentication";
-        break;
-      }
-      case "not-found": {
-        errMsg = "Not found";
-        break;
-      }
-    }
-    return errMsg;
   }
 
   private convertToProduct(

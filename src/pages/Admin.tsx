@@ -9,6 +9,7 @@ import MenuPoint from "../model/MenuPoint";
 import ErrorPage from "./ErrorPage";
 import CategoriesTab from "../components/adminPage/CategoriesTab";
 import MainPageSettingsTab from "../components/adminPage/MainPageSettingsTab";
+import OrdersTab from "../components/adminPage/OrdersTab";
 
 const menuPoints: MenuPoint[] = [
   {
@@ -37,6 +38,13 @@ const menuPoints: MenuPoint[] = [
     element: <ClientsTab />,
     order: 3,
     path: "clients",
+    forRoles: ["admin"],
+  },
+  {
+    title: "Orders",
+    element: <OrdersTab />,
+    order: 4,
+    path: "orders",
     forRoles: ["admin"],
   },
 ];

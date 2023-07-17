@@ -12,11 +12,18 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useMemo } from "react";
-import { useCartSelector } from "../redux/store";
+import { useAuthSelector, useCartSelector } from "../redux/store";
 import useProducts from "../hooks/useProducts";
 import Product from "../model/Product";
 import { Delete } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+import {
+  cartService,
+  clientService,
+  orderService,
+  productService,
+} from "../config/servicesConfig";
+import { OrderStatus } from "../model/Order";
 
 type CartItemModel = Product & { quantity: number };
 
@@ -79,6 +86,7 @@ function getPriceTotal(products: CartItemModel[]): number {
 
 const Cart = () => {
   const navigate = useNavigate();
+  const auth = useAuthSelector();
   const cart = useCartSelector();
   const [isLoading, error, products] = useProducts(Object.keys(cart));
   const productsInCart: Array<CartItemModel> = useMemo(() => {
@@ -87,6 +95,31 @@ const Cart = () => {
       quantity: cart[product.id!],
     }));
   }, [products, cart]);
+
+  async function placeOrder() {
+    if (auth?.uid !== undefined) {
+      try {
+        const products = await productService.getProductsById(
+          Object.keys(cart)
+        );
+        const productsQuantity: CartItemModel[] = products.map((product) => ({
+          ...product,
+          quantity: cart[product.id!],
+        }));
+        const client = await clientService.getClient(auth.uid);
+        await orderService.placeOrder({
+          clientId: auth.uid,
+          products: productsQuantity,
+          address: client.address,
+          statuses: {'placed': new Date()},
+          isDelivery: false
+        });
+        await cartService.clearCart(auth.uid)
+      } catch (e: any) {
+        console.log(e);
+      }
+    }
+  }
 
   return (
     <Container sx={{ mt: 2 }}>
@@ -112,7 +145,7 @@ const Cart = () => {
               Subtotal ({getItemsTotal(productsInCart)} items):{" "}
               {getPriceTotal(productsInCart)}
             </Typography>
-            <Button size="small" sx={{ mt: 2 }} variant="contained">
+            <Button onClick={placeOrder} size="small" sx={{ mt: 2 }} variant="contained">
               Proceed order
             </Button>
           </Paper>

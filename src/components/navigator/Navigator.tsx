@@ -32,7 +32,6 @@ const Navigator: React.FC<Props> = ({
   rightSlot,
   tabChangeFn,
 }) => {
-
   return (
     <AppBar sx={headerStyle} position="sticky">
       <Tabs
@@ -43,7 +42,7 @@ const Navigator: React.FC<Props> = ({
         {menuPoints.map((point: MenuPoint) => (
           <Tab
             key={point.title}
-            sx={{ "&:hover": { color: "white" }, color: "whitesmoke" }}
+            sx={{ "&:hover": { color: "lightcoral"}, color: "whitesmoke" }}
             label={point.title}
             component={Link}
             to={point.path}

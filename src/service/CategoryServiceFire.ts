@@ -12,7 +12,6 @@ import FirebaseService from "./FirebaseService";
 import firestoreApp from "../config/firebaseConfig";
 import { FirebaseError } from "firebase/app";
 import { v4 as uuid } from "uuid";
-import { getDocRef } from "../utils/firebase";
 
 const CATEGORIES_COLLECTION_NAME = "categories";
 
@@ -37,7 +36,7 @@ export default class CategoryServiceFire
   async addCategory(category: Category, image?: File | undefined): Promise<Category> {
     const newId = uuid();
     category.id = newId;
-    const docRef = getDocRef(this.collectionRef, newId);
+    const docRef = this.getDocRef(this.collectionRef, newId);
     if (image) {
       const [url] = await this.uploadImages([image], "categories");
       category.imageUrl = url;

@@ -57,7 +57,7 @@ const NavigatorPortrait: React.FC<Props> = ({
   function getTabs(): JSX.Element[] {
     return menuPoints.map((elem) => (
       <Tab
-        sx={{ "&:hover": { color: "black" } }}
+        sx={{ "&:hover": { color: "lightcoral" } }}
         key={elem.title}
         label={elem.title}
         component={Link}
@@ -68,20 +68,19 @@ const NavigatorPortrait: React.FC<Props> = ({
 
   return (
     <>
-      <AppBar
-        color="inherit"
-        sx={headerStyle}
-        position="sticky"
-      >
+      <AppBar color="inherit" sx={headerStyle} position="sticky">
         <IconButton
           aria-label="open drawer"
           onClick={handleDrawerOpen}
           edge="start"
           color="primary"
         >
-          <Menu fontSize="large"/>
+          <Menu />
         </IconButton>
-        <Typography sx={{ ml: "auto", mr: "auto", pr: 3, py: 1.5, color: "white" }} variant="h6">
+        <Typography
+          sx={{ ml: "auto", mr: "auto", pr: 3, py: 1.5, color: "white" }}
+          variant="h6"
+        >
           {menuPoints[selectedTab]?.title ?? ""}
         </Typography>
       </AppBar>

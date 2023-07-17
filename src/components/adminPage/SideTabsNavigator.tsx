@@ -1,27 +1,29 @@
 import { Container, Grid, Paper, Tab, Tabs, useMediaQuery, useTheme } from "@mui/material";
-import React, { useState } from "react";
-import { Link, Outlet } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, Outlet, useLocation } from "react-router-dom";
 import MenuPoint from "../../model/MenuPoint";
 
 type Props = {
   menuPoints: MenuPoint[];
 };
 
+const PATH_DEEP = 2
+
 const SideTabsNavigator: React.FC<Props> = ({ menuPoints }) => {
   const [value, setValue] = useState<number>(0);
+  const location = useLocation()
   const theme = useTheme();
   const isNarrow = useMediaQuery(theme.breakpoints.down("sm"));
 
-  // useEffect(() => {
-  //   let index = menuPoints.findIndex(
-  //     (point) => location.pathname.split("/")[1] === point.path
-  //   );
-  //   if (index === -1) {
-  //     index = 0;
-  //     navigate("/" + menuPoints[index].path);
-  //     setValue(index);
-  //   }
-  // }, []);
+  useEffect(() => {
+    let index = menuPoints.findIndex(
+      (point) => {
+        const pathParts = location.pathname.split("/")
+        return pathParts[PATH_DEEP] === point.path
+      }
+    );
+    setValue(index)
+  }, []);
 
   return (
     <Container maxWidth="lg" sx={{ mt: 2 }}>
@@ -37,7 +39,7 @@ const SideTabsNavigator: React.FC<Props> = ({ menuPoints }) => {
               {menuPoints.map((point) => (
                 <Tab
                   key={point.title}
-                  sx={{ "&:hover": { color: "white" } }}
+                  sx={{ "&:hover": { color: "lightcoral"} }}
                   label={point.title}
                   component={Link}
                   to={point.path}

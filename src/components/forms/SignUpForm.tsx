@@ -25,6 +25,7 @@ interface Props {
 }
 
 const emptyClient: Client = {
+  id: "",
   email: "",
   firstName: "",
   surName: "",

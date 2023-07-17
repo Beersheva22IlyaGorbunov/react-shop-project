@@ -14,7 +14,8 @@ const SignUp = () => {
     };
     try {
       const userId = await authService.register(loginData);
-      const addedClient = await clientService.addClient(client, userId);
+      client.id = userId;
+      const addedClient = await clientService.addClient(client);
     } catch (e) {
       if (typeof e === "string") {
         res.status = "error";
@@ -26,9 +27,7 @@ const SignUp = () => {
 
   return (
     <Box display="flex" flexDirection="column" alignItems="center" mt={2}>
-      <SignUpForm
-        onSignUp={handleSignUp}
-      />
+      <SignUpForm onSignUp={handleSignUp} />
     </Box>
   );
 };

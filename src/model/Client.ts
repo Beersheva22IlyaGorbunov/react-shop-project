@@ -1,6 +1,7 @@
 import Address from "./Address";
 
 type Client = {
+  id: string;
   email: string;
   firstName: string;
   surName: string;
