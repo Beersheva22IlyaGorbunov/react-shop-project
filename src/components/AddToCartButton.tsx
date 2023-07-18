@@ -17,16 +17,17 @@ const AddToCartButton: React.FC<Props> = ({ count, onClick }) => {
         borderWidth: "1px",
         borderStyle: "solid",
         borderColor: "primary.main",
-        borderRadius: "5px",
+        borderRadius: "4px",
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        width: "100%"
+        width: "100%",
+        height: "min-content"
       }}
     >
-      <Button onClick={() => onClick(count - 1)}>-</Button>
+      <Button sx={{my: "-1px"}} onClick={() => onClick(count - 1)}>-</Button>
       {count}
-      <Button onClick={() => onClick(count + 1)}>+</Button>
+      <Button sx={{my: "-1px"}} onClick={() => onClick(count + 1)}>+</Button>
     </Box>
   );
 };

@@ -10,6 +10,7 @@ import SignInMenu from "./SignInMenu";
 
 type Props = {
   menuPoints: MenuPoint[];
+  authMenuPoints: MenuPoint[];
 };
 
 function Copyright(props: any) {
@@ -25,7 +26,7 @@ function Copyright(props: any) {
   );
 }
 
-const NavigatorDispatcher: React.FC<Props> = ({ menuPoints }) => {
+const NavigatorDispatcher: React.FC<Props> = ({ menuPoints, authMenuPoints }) => {
   const [value, setValue] = useState<number>(0);
   const navigate = useNavigate();
   const location = useLocation();
@@ -66,7 +67,7 @@ const NavigatorDispatcher: React.FC<Props> = ({ menuPoints }) => {
           menuPoints={menuPoints}
           selectedTab={value}
           tabChangeFn={handleTabChange}
-          rightSlot={user ? <UserMenu /> : <SignInMenu />}
+          rightSlot={user ? <UserMenu menuPoints={authMenuPoints}/> : <SignInMenu />}
         />
       ) : (
         <NavigatorPortrait

@@ -11,11 +11,11 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useAuthSelector, useCartSelector } from "../redux/store";
 import useProducts from "../hooks/useProducts";
 import Product from "../model/Product";
-import { Delete } from "@mui/icons-material";
+import { Delete, ShoppingCartOutlined } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import {
   cartService,
@@ -23,73 +23,23 @@ import {
   orderService,
   productService,
 } from "../config/servicesConfig";
-import { OrderStatus } from "../model/Order";
+import ProductQuantity from "../model/ProductQuantity";
+import CartItem from "../components/CartItem"
+import PlaceOrder from "../components/PlaceOrder";
+import { getProductsPrice } from "../helpers/productHelpers";
 
-type CartItemModel = Product & { quantity: number };
 
-function CartItem({
-  cartItem,
-  dividerBefore = false,
-  onClickFn,
-}: {
-  cartItem: CartItemModel;
-  dividerBefore?: boolean;
-  onClickFn: () => void;
-}): JSX.Element {
-  return (
-    <>
-      {dividerBefore && <Divider />}
-      <ListItem
-        sx={{ display: "flex", flexDirection: "row", alignItems: "center" }}
-      >
-        <div style={{ display: "flex", cursor: "pointer" }} onClick={onClickFn}>
-          <Avatar
-            sx={{ width: 48, height: 48, mr: 2 }}
-            src={cartItem.imgLinks[0]}
-            alt={cartItem.name}
-          />
-          <div>
-            <Typography variant="h6">{cartItem.name}</Typography>
-            <Typography variant="body2">{cartItem.category}</Typography>
-          </div>
-        </div>
-        <div
-          style={{
-            marginInlineStart: "auto",
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
-          <div>
-            <Typography>Price: {cartItem.price}</Typography>
-          </div>
-
-          <IconButton>
-            <Delete color="warning" />
-          </IconButton>
-        </div>
-      </ListItem>
-    </>
-  );
-}
-
-function getItemsTotal(products: CartItemModel[]): number {
+function getItemsTotal(products: ProductQuantity[]): number {
   return products.reduce((accum, item) => (accum += item.quantity), 0);
-}
-
-function getPriceTotal(products: CartItemModel[]): number {
-  return products.reduce(
-    (accum, item) => (accum += item.price * item.quantity),
-    0
-  );
 }
 
 const Cart = () => {
   const navigate = useNavigate();
   const auth = useAuthSelector();
   const cart = useCartSelector();
+  const [modalIsVisible, setModalIsVisible] = useState<boolean>(false);
   const [isLoading, error, products] = useProducts(Object.keys(cart), [cart]);
-  const productsInCart: Array<CartItemModel> = useMemo(() => {
+  const productsInCart: Array<ProductQuantity> = useMemo(() => {
     return products
       .filter((product) => cart[product.id!] !== undefined)
       .map((product) => ({
@@ -98,59 +48,44 @@ const Cart = () => {
       }));
   }, [products, cart]);
 
-  useEffect(() => {}, [cart]);
-
-  async function placeOrder() {
-    if (auth?.uid !== undefined) {
-      try {
-        const products = await productService.getProductsById(
-          Object.keys(cart)
-        );
-        const productsQuantity: CartItemModel[] = products.map((product) => ({
-          ...product,
-          quantity: cart[product.id!],
-        }));
-        const client = await clientService.getClient(auth.uid);
-        await orderService.placeOrder({
-          clientId: auth.uid,
-          products: productsQuantity,
-          address: client.address,
-          statuses: { placed: new Date() },
-          isDelivery: false,
-        });
-        await cartService.clearCart(auth.uid);
-      } catch (e: any) {
-        console.log(e);
-      }
-    }
+  function handleDeleteItem(id: string) {
+    cartService.deleteCartItem(auth?.uid || "", id);
   }
 
   return (
     <Container sx={{ mt: 2 }}>
       <Grid container spacing={2}>
-        <Grid item xs={9}>
+        <Grid item xs={12} md={9}>
           <Paper sx={{ p: 2 }}>
             <Typography variant="h5">In cart:</Typography>
-            <List>
-              {productsInCart.map((cartItem, index) => (
-                <CartItem
-                  key={cartItem.id}
-                  dividerBefore={index !== 0}
-                  cartItem={cartItem}
-                  onClickFn={() => navigate(`/catalog/${cartItem.id}`)}
-                />
-              ))}
-            </List>
+            {productsInCart.length > 0 ? (
+              <List>
+                {productsInCart.map((cartItem, index) => (
+                  <CartItem
+                    key={cartItem.id}
+                    dividerBefore={index !== 0}
+                    deleteItemFn={handleDeleteItem}
+                    cartItem={cartItem}
+                    onClickFn={() => navigate(`/catalog/${cartItem.id}`)}
+                  />
+                ))}
+              </List>
+            ) : (
+              <Box color="GrayText" sx={{display: "flex", justifyContent: "center", alignItems:"center", minHeight: "10rem"}}>
+                <ShoppingCartOutlined />
+                <Typography>There is no products in your cart yet </Typography>
+              </Box>
+            )}
           </Paper>
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={12} md={3}>
           <Paper sx={{ p: 2 }}>
             <Typography>
               Subtotal ({getItemsTotal(productsInCart)} items):{" "}
-              {getPriceTotal(productsInCart)}
+              {getProductsPrice(productsInCart)}
             </Typography>
             <Button
-              onClick={placeOrder}
+              onClick={() => setModalIsVisible(true)}
               size="small"
               sx={{ mt: 2 }}
               variant="contained"
@@ -160,6 +95,7 @@ const Cart = () => {
           </Paper>
         </Grid>
       </Grid>
+      {modalIsVisible && <PlaceOrder onModalClose={() => setModalIsVisible(false)} orderProducts={productsInCart} clientId={auth?.uid || ""} />}
     </Container>
   );
 };

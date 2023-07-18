@@ -158,7 +158,7 @@ function App() {
         <Routes>
           <Route
             path="/"
-            element={<NavigatorDispatcher menuPoints={currentPoints} />}
+            element={<NavigatorDispatcher menuPoints={currentPoints} authMenuPoints={user ? authMenuPoints : anonimMenuPoints} />}
           >
             {routesFromPoints(currentPoints)}
             {routesFromPoints(user ? authMenuPoints : anonimMenuPoints)}

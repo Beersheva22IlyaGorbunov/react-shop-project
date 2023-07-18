@@ -11,11 +11,14 @@ type Order = {
   // status: OrderStatus;
   // placedAt: Date;
   // updatedAt: Date;/
-  statuses: {
-    [status in OrderStatus]?: Date
-  }
+  statuses: [{ status: OrderStatus; timestamp: Date }?];
 };
 
-export type OrderStatus = "placed" | "inProgress" | "inDelivering" | "delivered" | "readyToTake";
+export type OrderStatus =
+  | "placed"
+  | "inProgress"
+  | "inDelivering"
+  | "delivered"
+  | "readyToTake";
 
 export default Order;

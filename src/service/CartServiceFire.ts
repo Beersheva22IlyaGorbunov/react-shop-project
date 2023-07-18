@@ -27,12 +27,28 @@ export default class CartServiceFire
     CARTS_COLLECTION_NAME
   );
 
-  async setCart(uid: string, id: string, quantity: number): Promise<void> {
+  async updateCartItem(uid: string, id: string, quantity: number): Promise<void> {
     if (uid.length > 0) {
       const userCollectionRef = this.getUserCartRef(uid);
       const docRef = this.getDocRef(userCollectionRef, id);
       try {
         await setDoc(docRef, { id, quantity });
+      } catch (err: any) {
+        const firebaseError: FirebaseError = err;
+        const errorMessage = this.getErrorMsg(firebaseError);
+        throw errorMessage;
+      }
+    } else {
+      throw "Authentication";
+    }
+  }
+
+  async deleteCartItem(uid: string, id: string): Promise<void> {
+    if (uid.length > 0) {
+      const userCollectionRef = this.getUserCartRef(uid);
+      const docRef = this.getDocRef(userCollectionRef, id);
+      try {
+        await deleteDoc(docRef);
       } catch (err: any) {
         const firebaseError: FirebaseError = err;
         const errorMessage = this.getErrorMsg(firebaseError);

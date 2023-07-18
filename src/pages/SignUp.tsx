@@ -16,6 +16,7 @@ const SignUp = () => {
       const userId = await authService.register(loginData);
       client.id = userId;
       const addedClient = await clientService.addClient(client);
+      res.message = `Hello, ${addedClient.firstName}! You was registered succesfully.`
     } catch (e) {
       if (typeof e === "string") {
         res.status = "error";

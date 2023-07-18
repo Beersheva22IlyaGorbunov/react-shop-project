@@ -27,7 +27,7 @@ const ProductCard: React.FC<Props> = ({ product, inCart, onClickFn }) => {
   const user = useAuthSelector();
 
   function handleCartQuantityChange(newQuantity: number): void {
-    cartService.setCart(user?.uid || "", product.id!, newQuantity);
+    cartService.updateCartItem(user?.uid || "", product.id!, newQuantity);
   }
 
   return (

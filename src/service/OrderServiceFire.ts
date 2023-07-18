@@ -37,6 +37,7 @@ export default class OrderServiceFire
   async placeOrder(order: Order): Promise<Order> {
     const orderId = uuid();
     // const userOrdersCollectionRef = this.getUserOrdersRef(order.clientId);
+    order.statuses.push({ status: "placed", timestamp: new Date() });
     const docRef = this.getDocRef(this.ordersCollectionRef, orderId);
     order.id = orderId;
     try {
@@ -58,7 +59,7 @@ export default class OrderServiceFire
   updateOrder(order: Order): Promise<Order> {
     throw new Error("Method not implemented.");
   }
-  async getUserOrders(uid: string): Promise<Order[]> {
+  async getClientOrders(uid: string): Promise<Order[]> {
     const q = query(this.ordersCollectionRef, where("clientId", "==", uid));
     try {
       const response = await getDocs(q);
@@ -107,21 +108,24 @@ export default class OrderServiceFire
     if (!data) {
       throw new FirebaseError("not-found", "Product not found");
     }
-    console.log(data)
-    return this.documentDataToOrder(data)
+    console.log(data);
+    return this.documentDataToOrder(data);
   }
 
   private documentDataToOrder(data: DocumentData): Order {
-    Object.keys(data.statuses).forEach(function(key) {
-      data.statuses[key] = new Date(data.statuses[key].seconds * 1000);
-    });
+    console.log(data.statuses)
     return {
       id: data.id,
       clientId: data.clientId,
       products: data.products,
       isDelivery: data.isDelivery,
       address: data.address,
-      statuses: data.statuses
+      statuses: data.statuses.map(
+        (status: any) => ({
+          ...status,
+          timestamp: new Date(status.timestamp.seconds * 1000),
+        })
+      ),
     };
   }
 }

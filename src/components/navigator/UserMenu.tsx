@@ -12,8 +12,13 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuthSelector, useCartSelector } from "../../redux/store";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import MenuPoint from "../../model/MenuPoint";
 
-const UserMenu = () => {
+type Props = {
+  menuPoints: MenuPoint[];
+};
+
+const UserMenu: React.FC<Props> = ({ menuPoints }) => {
   const user = useAuthSelector();
   const navigate = useNavigate();
   const cart = useCartSelector();
@@ -38,13 +43,16 @@ const UserMenu = () => {
 
   return (
     <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-      <IconButton onClick={() => navigate("/cart")}>
+      <IconButton onClick={() => navigate("/cart")} sx={{ "&:hover": { color: "primary.main" }, color: "white" }}>
         <Badge
-          badgeContent={Object.values(cart).reduce((accum, val) => accum + val, 0)}
+          badgeContent={Object.values(cart).reduce(
+            (accum, val) => accum + val,
+            0
+          )}
           color="secondary"
           max={9}
         >
-          <ShoppingCartIcon color="primary" />
+          <ShoppingCartIcon />
         </Badge>
       </IconButton>
       <div
@@ -72,12 +80,9 @@ const UserMenu = () => {
           "aria-labelledby": "basic-button",
         }}
       >
-        <MenuItem onClick={handleClose}>Profile</MenuItem>
-        <MenuItem onClick={handleClose}>My orders</MenuItem>
-        <Divider />
-        <MenuItem onClick={handleLogout}>
-          <Link to="signout">Logout</Link>
-        </MenuItem>
+        {menuPoints.map((point) => (
+          <MenuItem key={point.title} onClick={() => navigate(point.path)}>{point.title}</MenuItem>
+        ))}
       </Menu>
     </div>
   );

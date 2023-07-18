@@ -19,6 +19,7 @@ import { LoadingButton } from "@mui/lab";
 import { Link } from "react-router-dom";
 import Client from "../../model/Client";
 import Address from "../../model/Address";
+import AddressForm from "./AddressForm";
 
 interface Props {
   onSignUp: (loginData: LoginData, client: Client) => Promise<ActionResult>;
@@ -48,6 +49,7 @@ const SignUpForm: React.FC<Props> = ({ onSignUp }) => {
     password: "",
   });
   const [client, setClient] = useState<Client>(emptyClient);
+  const [addressError, setAddressError] = useState(false);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -108,43 +110,9 @@ const SignUpForm: React.FC<Props> = ({ onSignUp }) => {
     }));
   }
 
-  function handleCityChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const city = e.target.value;
-    const address = { ...client.address, city };
-    setClient((prev) => ({
-      ...prev,
-      address: address as Address,
-    }));
+  function handleAddressChange(address: Address) {
+    
   }
-
-  function handleCountryChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const country = e.target.value;
-    const address = { ...client.address, country };
-    setClient((prev) => ({
-      ...prev,
-      address: address as Address,
-    }));
-  }
-
-  function handleStreetChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const street = e.target.value;
-    const address = { ...client.address, street };
-    setClient((prev) => ({
-      ...prev,
-      address: address as Address,
-    }));
-  }
-
-  function handleBuildingChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const building = e.target.value;
-    const address = { ...client.address, building };
-    setClient((prev) => ({
-      ...prev,
-      address: address as Address,
-    }));
-  }
-
-  function handleFlatChange(e: React.ChangeEvent<HTMLInputElement>) {}
 
   return (
     <Container component="main" maxWidth="xs">
@@ -216,52 +184,6 @@ const SignUpForm: React.FC<Props> = ({ onSignUp }) => {
             onChange={handlePasswordChange}
             value={loginData.password}
           />
-          <Accordion
-            onChange={(__, isOpened) => setAddressIsOpened(isOpened)}
-            sx={{ boxShadow: "none", mt: 1 }}
-          >
-            <AccordionSummary expandIcon={<ExpandMore />}>
-              <Typography color="gray">Add adress</Typography>
-            </AccordionSummary>
-            <AccordionDetails sx={{ p: 0 }}>
-              <TextField
-                margin="dense"
-                fullWidth
-                required={addressIsOpened}
-                size="small"
-                label="Country"
-                onChange={handleCountryChange}
-                value={client.address?.country}
-              />
-              <TextField
-                margin="dense"
-                fullWidth
-                required={addressIsOpened}
-                size="small"
-                label="City"
-                onChange={handleCityChange}
-                value={client.address?.city}
-              />
-              <TextField
-                margin="dense"
-                fullWidth
-                required={addressIsOpened}
-                size="small"
-                label="Street"
-                onChange={handleStreetChange}
-                value={client.address?.street}
-              />
-              <TextField
-                margin="dense"
-                fullWidth
-                required={addressIsOpened}
-                size="small"
-                label="Building"
-                onChange={handleBuildingChange}
-                value={client.address?.building}
-              />
-            </AccordionDetails>
-          </Accordion>
           <LoadingButton
             type="submit"
             fullWidth
@@ -288,3 +210,16 @@ const SignUpForm: React.FC<Props> = ({ onSignUp }) => {
 };
 
 export default SignUpForm;
+
+
+// <Accordion
+//             onChange={(__, isOpened) => setAddressIsOpened(isOpened)}
+//             sx={{ boxShadow: "none", mt: 1 }}
+//           >
+//             <AccordionSummary expandIcon={<ExpandMore />}>
+//               <Typography color="gray">Add adress</Typography>
+//             </AccordionSummary>
+//             <AccordionDetails sx={{ p: 0 }}>
+//               <AddressForm initial={client.address || emptyClient.address!} onChange={handleAddressChange} />
+//             </AccordionDetails>
+//           </Accordion>

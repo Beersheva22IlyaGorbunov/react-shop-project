@@ -8,9 +8,9 @@ type Props = {
 };
 
 const OrderItem: React.FC<Props> = ({ order }) => {
-  const statusesArr = Object.entries(order.statuses).sort((a, b) =>
-    a[1] < b[1] ? -1 : 1
-  );
+  // const statusesArr = Object.entries(order.statuses).sort((a, b) =>
+  //   a[1] < b[1] ? -1 : 1
+  // );
 
   return (
     <ListItem
@@ -29,11 +29,11 @@ const OrderItem: React.FC<Props> = ({ order }) => {
         {order.isDelivery ? order.address?.city : "to pickup"}
       </Box>
       
-      {statusesArr.map((status) => (
+      {
         <Typography variant="h6">
-          Order {status[0]}: {status[1].toLocaleString()}
+          Order {order.statuses[order.statuses.length - 1]?.status}: {order.statuses[order.statuses.length - 1]?.timestamp.toLocaleString()}
         </Typography>
-      ))}
+      }
       </Stack>
     </ListItem>
   );

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import Product from "../model/Product";
-import { productService } from "../config/servicesConfig";
+import Product from "../../model/Product";
+import { productService } from "../../config/servicesConfig";
 
 const useProductsRx = (): [boolean, string, Product[]]  => {
   const [products, setProducts] = useState<Product[]>([]);

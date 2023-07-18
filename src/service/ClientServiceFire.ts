@@ -26,6 +26,18 @@ export default class ClientServiceFire extends FirebaseService implements Client
     return client;
   }
 
+  async updateClient(client: Client): Promise<Client> {
+    const docRef = this.getDocRef(this.collectionRef, client.id);
+    try {
+      await setDoc(docRef, client);
+    } catch (err: any) {
+      const firestoreError: FirestoreError = err;
+      const errorMessage = this.getErrorMsg(firestoreError);
+      throw errorMessage;
+    }
+    return client;
+  }
+
   async getClient(uid: string): Promise<Client> {
     const docRef = this.getDocRef(this.collectionRef, uid);
     try {
