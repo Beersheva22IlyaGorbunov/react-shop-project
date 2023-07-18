@@ -4,6 +4,7 @@ import {
   DocumentSnapshot,
   QueryDocumentSnapshot,
   collection,
+  deleteDoc,
   getDocs,
   getFirestore,
   query,
@@ -36,7 +37,6 @@ export default class OrderServiceFire
 
   async placeOrder(order: Order): Promise<Order> {
     const orderId = uuid();
-    // const userOrdersCollectionRef = this.getUserOrdersRef(order.clientId);
     order.statuses.push({ status: "placed", timestamp: new Date() });
     const docRef = this.getDocRef(this.ordersCollectionRef, orderId);
     order.id = orderId;
@@ -48,13 +48,6 @@ export default class OrderServiceFire
       const errorMessage = this.getErrorMsg(firebaseError);
       throw errorMessage;
     }
-  }
-  private getUserOrdersRef(uid: string): CollectionReference {
-    return collection(
-      this.ordersCollectionRef,
-      uid,
-      USER_ORDERS_COLLECTION_NAME
-    );
   }
   updateOrder(order: Order): Promise<Order> {
     throw new Error("Method not implemented.");
@@ -97,8 +90,15 @@ export default class OrderServiceFire
       })
     ) as Observable<string | Order[]>;
   }
-  deleteOrder(uid: string, id: string): Promise<void> {
-    throw new Error("Method not implemented.");
+  async deleteOrder(id: string): Promise<void> {
+    const docRef = this.getDocRef(this.ordersCollectionRef, id);
+    try {
+      await deleteDoc(docRef);
+    } catch (err: any) {
+      const firebaseError: FirebaseError = err;
+      const errorMessage = this.getErrorMsg(firebaseError);
+      throw errorMessage;
+    }
   }
 
   private snapshotToOrder(

@@ -37,48 +37,14 @@ const AddressForm: React.FC<Props> = ({
       }));
     };
 
-  function handleCityChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const city = e.target.value;
-    setAddress((prev) => ({
-      ...prev,
-      city: city,
-    }));
-  }
-
-  function handleCountryChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const country = e.target.value;
-    setAddress((prev) => ({
-      ...prev,
-      country: country,
-    }));
-  }
-
-  function handleStreetChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const street = e.target.value;
-    setAddress((prev) => ({
-      ...prev,
-      street: street,
-    }));
-  }
-
-  function handleBuildingChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const building = e.target.value;
-    setAddress((prev) => ({
-      ...prev,
-      building: building,
-    }));
-  }
-
-  function handleFlatChange(e: React.ChangeEvent<HTMLInputElement>) {}
-
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     console.log("Submit");
     onSubmit && onSubmit(address).catch((e) => console.log(e));
   }
 
-  function handleChange(event: React.FormEvent<HTMLFormElement>) {
-    // onChange && onChange(address)
+  function handleChange() {
+    onChange && onChange(address)
   }
 
   return (
@@ -112,7 +78,7 @@ const AddressForm: React.FC<Props> = ({
         required={required}
         size="small"
         label="Street"
-        onChange={handleStreetChange}
+        onChange={handleFieldChange("street")}
         value={address.street}
       />
       <TextField
@@ -121,7 +87,16 @@ const AddressForm: React.FC<Props> = ({
         required={required}
         size="small"
         label="Building"
-        onChange={handleBuildingChange}
+        onChange={handleFieldChange("building")}
+        value={address.building}
+      />
+      <TextField
+        margin="dense"
+        fullWidth
+        required={required}
+        size="small"
+        label="Flat"
+        onChange={handleFieldChange("flat")}
         value={address.building}
       />
       {!hideButton && <Button type="submit">Submit</Button>}

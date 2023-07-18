@@ -7,5 +7,5 @@ export default interface OrderService {
   getClientOrders(uid: string): Promise<Order[]>;
   getAllOrders(): Promise<Order[]>;
   getAllOrdersRx(): Observable<Order[] | string>;
-  deleteOrder(uid: string, id: string): Promise<void>;
+  deleteOrder(id: string): Promise<void>;
 }

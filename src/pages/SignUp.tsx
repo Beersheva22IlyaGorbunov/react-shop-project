@@ -12,6 +12,9 @@ const SignUp = () => {
       status: "success",
       message: "",
     };
+    if (client.address === undefined) {
+      delete client.address
+    }
     try {
       const userId = await authService.register(loginData);
       client.id = userId;
