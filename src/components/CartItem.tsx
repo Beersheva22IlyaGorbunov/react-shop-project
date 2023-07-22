@@ -7,6 +7,7 @@ import {
 } from '@mui/material'
 import ProductQuantity from '../model/ProductQuantity'
 import { Delete } from '@mui/icons-material'
+import generalConfig from "../config/generalConfig.json"
 
 interface Props {
   cartItem: ProductQuantity
@@ -46,7 +47,7 @@ const CartItem: React.FC<Props> = ({
           }}
         >
           <div>
-            <Typography>Price: {cartItem.price}</Typography>
+            <Typography>Price: {cartItem.price} {generalConfig.currency}</Typography>
           </div>
 
           <IconButton onClick={() => deleteItemFn(cartItem.id!)}>

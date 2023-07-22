@@ -1,5 +1,5 @@
-import { AppBar, SxProps, Tab, Tabs } from '@mui/material'
-import React, { ReactNode } from 'react'
+import { AppBar, Container, SxProps, Tab, Tabs } from '@mui/material'
+import React from 'react'
 import { Link } from 'react-router-dom'
 import UserMenu from './UserMenu'
 import { Theme } from '@emotion/react'
@@ -19,11 +19,10 @@ const headerStyle: SxProps<Theme> = {
   alignItems: 'center',
   backgroundColor: 'rgba(0, 0, 0, .5)',
   backdropFilter: 'blur(3px)',
-  mt: 2,
   px: 2,
   borderRadius: 4,
   mx: 'auto',
-  width: '90%'
+  boxShadow: 3
 }
 
 const Navigator: React.FC<Props> = ({
@@ -33,7 +32,8 @@ const Navigator: React.FC<Props> = ({
   tabChangeFn
 }) => {
   return (
-    <AppBar sx={headerStyle} position='sticky'>
+    <AppBar sx={{mt: 2, background: "none", boxShadow: "none"}} position='sticky'>
+      <Container maxWidth="lg" sx={headerStyle}>
       <Tabs
         value={selectedTab}
         onChange={(__, newValue) => tabChangeFn(newValue)}
@@ -50,6 +50,7 @@ const Navigator: React.FC<Props> = ({
         ))}
       </Tabs>
       <UserMenu menuPoints={authUserPoints} />
+      </Container>
     </AppBar>
   )
 }

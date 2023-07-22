@@ -1,32 +1,25 @@
 import {
-  Avatar,
   Box,
   Button,
   Container,
-  Divider,
   Grid,
-  IconButton,
   List,
-  ListItem,
   Paper,
   Typography
 } from '@mui/material'
-import React, { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useAuthSelector, useCartSelector } from '../redux/store'
 import useProducts from '../hooks/useProducts'
-import Product from '../model/Product'
-import { Delete, ShoppingCartOutlined } from '@mui/icons-material'
+import { ShoppingCartOutlined } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
 import {
   cartService,
-  clientService,
-  orderService,
-  productService
 } from '../config/servicesConfig'
 import ProductQuantity from '../model/ProductQuantity'
 import CartItem from '../components/CartItem'
 import PlaceOrder from '../components/PlaceOrder'
 import { getProductsPrice } from '../helpers/productHelpers'
+import generalConfig from "../config/generalConfig.json"
 
 function getItemsTotal (products: ProductQuantity[]): number {
   return products.reduce((accum, item) => (accum += item.quantity), 0)
@@ -37,7 +30,7 @@ const Cart = () => {
   const auth = useAuthSelector()
   const cart = useCartSelector()
   const [modalIsVisible, setModalIsVisible] = useState<boolean>(false)
-  const [isLoading, error, products] = useProducts(Object.keys(cart), [cart])
+  const [products] = useProducts(Object.keys(cart), [cart])
   const productsInCart: ProductQuantity[] = useMemo(() => {
     return products
       .filter((product) => cart[product.id!] !== undefined)
@@ -83,13 +76,13 @@ const Cart = () => {
           <Paper sx={{ p: 2 }}>
             <Typography>
               Subtotal ({getItemsTotal(productsInCart)} items):{' '}
-              {getProductsPrice(productsInCart)}
+              {getProductsPrice(productsInCart)} {generalConfig.currency}
             </Typography>
             <Button
               onClick={() => setModalIsVisible(true)}
               disabled={products.length === 0}
               size='small'
-              sx={{ mt: 2 }}
+              sx={{ mt: 2, color: "white" }}
               variant='contained'
             >
               Proceed order

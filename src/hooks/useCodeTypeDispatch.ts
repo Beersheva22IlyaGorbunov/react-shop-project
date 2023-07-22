@@ -16,7 +16,7 @@ const useCodeTypeDispatch = () => {
       message = "Can't recognize you, you need to login"
     } else if (error.includes('Not found')) {
       code = CodeType.NOT_FOUND
-      message = 'Can\'t find employee'
+      message = 'Can\'t find resource'
     } else if (error.includes('unavailable')) {
       code = CodeType.SERVER_ERROR
       message = error

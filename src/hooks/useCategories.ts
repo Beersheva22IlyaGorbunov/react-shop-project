@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
-import HomePageSettings from '../model/settings/HomePageSettings'
-import { categoryService, settingService } from '../config/servicesConfig'
+import { categoryService } from '../config/servicesConfig'
 import Category from '../model/Category'
 
 const useCategories = (): [boolean, string, Category[]] => {

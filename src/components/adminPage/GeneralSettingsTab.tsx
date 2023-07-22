@@ -3,23 +3,19 @@ import {
   Button,
   CircularProgress,
   Grid,
-  IconButton,
   Paper,
-  Stack,
   TextField,
   Typography
 } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { settingService } from '../../config/servicesConfig'
-import useSettings from '../../hooks/useSettings'
 import RootState from '../../model/redux/RootState'
 import { useSelector } from 'react-redux'
 import { Settings } from '../../model/redux/SettingsState'
 import useCodeTypeDispatch from '../../hooks/useCodeTypeDispatch'
-import { Delete } from '@mui/icons-material'
 import ImagePreview from '../ImagePreview'
 
-const MainPageSettingsTab = () => {
+const GeneralSettingTab = () => {
   const savedSettings = useSelector(
     (state: RootState) => state.settingsState.settings
   )
@@ -51,7 +47,7 @@ const MainPageSettingsTab = () => {
       error: ''
     }
     try {
-      await settingService.setHome(
+      await settingService.set(
         {
           ...settings
         },
@@ -72,9 +68,9 @@ const MainPageSettingsTab = () => {
     return (
       <Paper sx={{ p: 2 }}>
         <Typography variant='h5' mb={2}>
-          Main page settings
+          General settings
         </Typography>
-        <CircularProgress />
+        <CircularProgress sx={{display: "block", mx: "auto"}} />
       </Paper>
     )
   }
@@ -82,7 +78,7 @@ const MainPageSettingsTab = () => {
   return (
     <Paper sx={{ p: 2 }}>
       <Typography variant='h5' mb={2}>
-        Main page settings
+        General settings
       </Typography>
       <Box component='form' onSubmit={handleSubmit}>
         <Grid container spacing={2}>
@@ -167,7 +163,7 @@ const MainPageSettingsTab = () => {
           </Grid>
         )}
 
-        <Button variant='contained' type='submit' sx={{ mt: 2 }}>
+        <Button variant='contained' type='submit' sx={{ mt: 2, color: 'white' }}>
           Save
         </Button>
       </Box>
@@ -175,4 +171,4 @@ const MainPageSettingsTab = () => {
   )
 }
 
-export default MainPageSettingsTab
+export default GeneralSettingTab

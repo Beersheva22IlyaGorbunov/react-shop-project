@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react'
-import Order from '../model/Order'
-import { clientService, orderService } from '../config/servicesConfig'
+import { clientService } from '../config/servicesConfig'
 import Client from '../model/Client'
 
-const useClient = (id: string): [boolean, string, Client?] => {
+const useClient = (id: string): [Client | undefined, boolean, string] => {
   const [client, setClient] = useState<Client>()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [error, setError] = useState('')
@@ -21,7 +20,7 @@ const useClient = (id: string): [boolean, string, Client?] => {
       .finally(() => setIsLoading(false))
   }, [])
 
-  return [isLoading, error, client]
+  return [client, isLoading, error]
 }
 
 export default useClient

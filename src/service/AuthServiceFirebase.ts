@@ -4,7 +4,6 @@ import {
   createUserWithEmailAndPassword,
   getAuth,
   sendEmailVerification,
-  sendSignInLinkToEmail,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut
@@ -52,6 +51,7 @@ export default class AuthServiceFirebase implements AuthService {
         role: (await this.isAdmin(userCredentials.user.uid)) ? 'admin' : 'user'
       }
     } catch (e) {
+      console.log(e)
       throw new Error('Wrong credentials')
     }
     return userData

@@ -2,7 +2,6 @@ import {
   CollectionReference,
   collection,
   deleteDoc,
-  getDoc,
   getDocs,
   getFirestore,
   setDoc

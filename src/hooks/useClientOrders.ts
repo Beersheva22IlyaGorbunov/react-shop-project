@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import Order from '../model/Order'
 import { orderService } from '../config/servicesConfig'
 
-const useClientOrders = (uid: string): [boolean, string, Order[]] => {
+const useClientOrders = (uid: string): [Order[], boolean, string] => {
   const [orders, setOrders] = useState<Order[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [error, setError] = useState('')
@@ -18,9 +18,9 @@ const useClientOrders = (uid: string): [boolean, string, Order[]] => {
       })
       .catch((err) => setError(err))
       .finally(() => setIsLoading(false))
-  }, [])
+  }, [uid])
 
-  return [isLoading, error, orders]
+  return [orders, isLoading, error]
 }
 
 export default useClientOrders

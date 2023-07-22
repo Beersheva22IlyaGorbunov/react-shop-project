@@ -1,6 +1,6 @@
-import React, { useEffect, useMemo, useState } from 'react'
-import useProducts from '../hooks/useProducts'
-import ProductCard from '../components/ProductCard'
+import React, { useEffect, useMemo, useState } from "react";
+import useProducts from "../hooks/useProducts";
+import ProductCard from "../components/ProductCard";
 import {
   Box,
   Checkbox,
@@ -11,109 +11,136 @@ import {
   Grid,
   IconButton,
   Paper,
+  Skeleton,
   Slider,
   TextField,
   Typography,
   useMediaQuery,
-  useTheme
-} from '@mui/material'
-import CatalogSkeleton from '../components/skeletons/CatalogSkeleton'
-import {
-  Route,
-  Routes,
-  useNavigate,
-  useSearchParams
-} from 'react-router-dom'
-import ProductDetails from './ProductDetails'
-import ErrorPage from './ErrorPage'
-import Product from '../model/Product'
-import { useCartSelector } from '../redux/store'
-import { Tune } from '@mui/icons-material'
-import CloseIcon from '@mui/icons-material/Close'
+  useTheme,
+} from "@mui/material";
+import CatalogSkeleton from "../components/skeletons/CatalogSkeleton";
+import { Route, Routes, useNavigate, useSearchParams } from "react-router-dom";
+import ProductDetails from "./ProductDetails";
+import ErrorPage from "./ErrorPage";
+import Product from "../model/Product";
+import { useCartSelector } from "../redux/store";
+import { Tune } from "@mui/icons-material";
+import CloseIcon from "@mui/icons-material/Close";
+import generalConfig from "../config/generalConfig.json";
+
+const CATEGORY_PARAM = "category";
+const MIN_PRICE_PARAM = "minPrice";
+const MAX_PRICE_PARAM = "maxPrice";
 
 const FilterPanel = ({
   minPrice,
   maxPrice,
   categories,
-  onChange
+  onChange,
 }: {
-  minPrice: number
-  maxPrice: number
-  categories: string[]
-  onChange: (fn: (products: Product[]) => Product[]) => void
+  minPrice: number;
+  maxPrice: number;
+  categories: string[];
+  onChange: (fn: (products: Product[]) => Product[]) => void;
 }) => {
-  const [priceRange, setPriceRange] = useState<number[]>([minPrice, maxPrice])
-  const [searchParams, setSearchParams] = useSearchParams()
-  const [filterIsVisible, setFilterIsVisible] = useState<boolean>(false)
-  const theme = useTheme()
-  const isNarrow = useMediaQuery(theme.breakpoints.down('sm'))
+  const [priceRange, setPriceRange] = useState<number[]>([minPrice, maxPrice]);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [filterIsVisible, setFilterIsVisible] = useState<boolean>(false);
+  const theme = useTheme();
+  const isNarrow = useMediaQuery(theme.breakpoints.down("sm"));
 
   const [checkedCategories, setCheckedCategories] = useState<{
-    [category: string]: boolean
+    [category: string]: boolean;
   }>(
     categories.reduce(
       (accum, category) => ({ ...accum, [category]: false }),
       {}
     )
-  )
+  );
 
   useEffect(() => {
-    const selectedCategory = searchParams.get('category')
-    if (selectedCategory) {
+    const selectedCategory = searchParams.getAll(CATEGORY_PARAM);
+    selectedCategory.forEach((category) =>
       setCheckedCategories((state) => ({
         ...state,
-        [selectedCategory]: true
+        [category]: true,
       }))
-    }
+    );
 
-    const paramsMinPrice = searchParams.get('minPrice')
+    const paramsMinPrice = searchParams.get(MIN_PRICE_PARAM);
     if (paramsMinPrice && !isNaN(+paramsMinPrice)) {
       setPriceRange((prev) =>
         prev.map((item, index) => (index === 0 ? +paramsMinPrice : item))
-      )
+      );
     }
-    const paramsMaxPrice = searchParams.get('maxPrice')
+    const paramsMaxPrice = searchParams.get(MAX_PRICE_PARAM);
     if (paramsMaxPrice && !isNaN(+paramsMaxPrice)) {
       setPriceRange((prev) =>
         prev.map((item, index) => (index === 1 ? +paramsMaxPrice : item))
-      )
+      );
     }
-  }, [])
+  }, []);
 
-  function pricePredicate (product: Product): boolean {
+  function pricePredicate(product: Product): boolean {
     if (minPrice !== priceRange[0] || maxPrice !== priceRange[1]) {
-      return product.price >= priceRange[0] && product.price <= priceRange[1]
+      return product.price >= priceRange[0] && product.price <= priceRange[1];
     }
-    return true
+    return true;
   }
 
-  function categoriesPredicate (product: Product): boolean {
+  function categoriesPredicate(product: Product): boolean {
     if (
       Object.values(checkedCategories).every((isChecked) => isChecked) ||
       Object.values(checkedCategories).every((isChecked) => !isChecked)
     ) {
-      return true
+      return true;
     }
-    return checkedCategories[product.category]
+    return checkedCategories[product.category];
   }
 
   useEffect(() => {
-    function filterFn (products: Product[]) {
+    function filterFn(products: Product[]) {
       return products.filter((product) =>
         [pricePredicate, categoriesPredicate].every((pred) => pred(product))
-      )
+      );
     }
-    onChange(filterFn)
-  }, [priceRange, checkedCategories])
+    onChange(filterFn);
+    console.log(checkedCategories, priceRange);
+    if (priceRange[0] !== minPrice) {
+      setSearchParams((prev) => ({
+        ...prev,
+        [MIN_PRICE_PARAM]: priceRange[0].toString(),
+      }));
+    }
+    if (priceRange[1] !== maxPrice) {
+      setSearchParams((prev) => ({
+        ...prev,
+        [MAX_PRICE_PARAM]: priceRange[1].toString(),
+      }));
+    }
+    if (
+      !(
+        Object.values(checkedCategories).every((isChecked) => isChecked) ||
+        Object.values(checkedCategories).every((isChecked) => !isChecked)
+      )
+    ) {
+      setSearchParams((prev) => ({
+        ...prev,
+        [CATEGORY_PARAM]: Object.entries(checkedCategories)
+          .filter(([__, state]) => state)
+          .map(([cat, __]) => cat),
+      }));
+    }
+  }, [priceRange, checkedCategories]);
 
   const handleCategoriesChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setCheckedCategories((state) => ({
       ...state,
-      [event.target.name]: event.target.checked
-    }))
-  }
+      [event.target.name]: event.target.checked,
+    }));
+  };
 
   return (
     <>
@@ -122,18 +149,24 @@ const FilterPanel = ({
           isNarrow
             ? {
                 p: 2,
-                backgroundColor: 'white',
-                position: 'fixed',
+                backgroundColor: "white",
+                position: "fixed",
                 zIndex: 10,
-                bottom: filterIsVisible ? 10 : '-100%',
+                bottom: filterIsVisible ? 10 : "-100%",
                 left: 10,
-                right: 10
+                right: 10,
               }
             : { p: 2 }
         }
       >
-        <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-          <Typography variant='h5' mb={1}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
+          <Typography variant="h5" mb={1}>
             Filtering
           </Typography>
           {isNarrow && (
@@ -142,32 +175,33 @@ const FilterPanel = ({
             </IconButton>
           )}
         </Box>
-        <Typography variant='h6'>Price</Typography>
+        <Typography variant="h6">Price, {generalConfig.currency}</Typography>
         <Box
-          sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}
+          sx={{ display: "flex", flexDirection: "row", alignItems: "center" }}
         >
           <TextField
-            size='small'
-            variant='outlined'
-            type='number'
+            size="small"
+            variant="outlined"
+            type="number"
             value={priceRange[0]}
             inputProps={{
-              style: { paddingLeft: '.5rem', paddingRight: '.5rem' }
+              style: { paddingLeft: ".5rem", paddingRight: ".5rem" },
             }}
             onChange={(e) =>
               setPriceRange((prev) =>
                 prev.map((item, index) =>
                   index === 0 ? +e.target.value : item
                 )
-              )}
+              )
+            }
           />
           <Typography sx={{ mx: 1 }}>-</Typography>
           <TextField
-            size='small'
-            variant='outlined'
-            type='number'
+            size="small"
+            variant="outlined"
+            type="number"
             inputProps={{
-              style: { paddingLeft: '.5rem', paddingRight: '.5rem' }
+              style: { paddingLeft: ".5rem", paddingRight: ".5rem" },
             }}
             value={priceRange[1]}
             onChange={(e) =>
@@ -175,21 +209,22 @@ const FilterPanel = ({
                 prev.map((item, index) =>
                   index === 1 ? +e.target.value : item
                 )
-              )}
+              )
+            }
           />
         </Box>
 
         <Slider
-          getAriaLabel={() => 'Price range'}
+          getAriaLabel={() => "Price range"}
           value={priceRange}
           min={minPrice}
           max={maxPrice}
-          size='small'
+          size="small"
           onChange={(__, value) => setPriceRange(value as number[])}
-          valueLabelDisplay='auto'
+          valueLabelDisplay="auto"
         />
         <Divider />
-        <Typography variant='h6'>Categories</Typography>
+        <Typography variant="h6">Categories</Typography>
         <FormGroup>
           {categories.map((category, index) => (
             <FormControlLabel
@@ -212,72 +247,56 @@ const FilterPanel = ({
           sx={{
             width: 40,
             height: 40,
-            backgroundColor: 'primary.main',
-            display: { xs: 'block', md: 'hidden' },
-            position: 'fixed',
+            backgroundColor: "primary.main",
+            display: { xs: "block", md: "hidden" },
+            position: "fixed",
             bottom: 10,
-            right: 10
+            right: 10,
           }}
         >
           <Tune />
         </IconButton>
       )}
     </>
-  )
-}
+  );
+};
 
 const Catalog = () => {
-  const [isLoading, error, products] = useProducts()
-  const navigate = useNavigate()
-  const cart = useCartSelector()
-  const [displayableProducts, setDisplayableProducts] = useState<Product[]>([])
+  const [products, isLoading] = useProducts();
+  const navigate = useNavigate();
+  const cart = useCartSelector();
+  const [displayableProducts, setDisplayableProducts] = useState<Product[]>([]);
   const [minPrice, maxPrice] = useMemo(
     () =>
       products.reduce(
         (accum, item) => {
           if (item.price < accum[0]) {
-            accum[0] = item.price
+            accum[0] = item.price;
           }
           if (item.price > accum[1]) {
-            accum[1] = item.price
+            accum[1] = item.price;
           }
-          return accum
+          return accum;
         },
         [products[0]?.price || 0, products[0]?.price || 0]
       ),
     [products]
-  )
+  );
 
   useEffect(() => {
-    setDisplayableProducts(products)
-  }, [products])
-
-  const productsInCategories = useMemo(() => {
-    const resObj: { [key: string]: [Product] } = products.reduce<{
-      [key: string]: [Product]
-    }>((accum, product) => {
-      if (accum[product.category]) {
-        accum[product.category].push(product)
-      } else {
-        accum[product.category] = [product]
-      }
-      return accum
-    }, {})
-    return Object.entries(resObj)
-  }, [products])
+    setDisplayableProducts(products);
+  }, [products]);
 
   const categories = useMemo(() => {
     return Object.keys(
       products.reduce<{ [key: string]: undefined }>((accum, product) => {
-        return { ...accum, [product.category]: undefined }
+        return { ...accum, [product.category]: undefined };
       }, {})
-    )
-  }, [products])
-  console.log(productsInCategories)
+    );
+  }, [products]);
 
-  function handleFilterFunc (fn: (products: Product[]) => Product[]) {
-    console.log(fn)
-    setDisplayableProducts(fn(products))
+  function handleFilterFunc(fn: (products: Product[]) => Product[]) {
+    setDisplayableProducts(fn(products));
   }
 
   return (
@@ -288,40 +307,38 @@ const Catalog = () => {
           <Container sx={{ mt: 2 }}>
             <Grid container spacing={2}>
               <Grid item sm={4} md={3}>
-                {!isLoading && (
+                {isLoading ? <Skeleton variant="rounded" height={"300px"} /> :
                   <FilterPanel
                     minPrice={minPrice}
                     maxPrice={maxPrice}
                     onChange={handleFilterFunc}
                     categories={categories}
                   />
-                )}
+                }
               </Grid>
               <Grid item container xs={12} sm={8} md={9} spacing={2}>
-                {isLoading
-                  ? (
-                    <CatalogSkeleton />
-                    )
-                  : (
-                      displayableProducts.map((product) => (
-                        <Grid key={product.id} item xs={6} md={4} lg={3}>
-                          <ProductCard
-                            product={product}
-                            inCart={cart[product.id!] || 0}
-                            onClickFn={() => navigate(`/catalog/${product.id}`)}
-                          />
-                        </Grid>
-                      ))
-                    )}
+                {isLoading ? (
+                  <CatalogSkeleton />
+                ) : (
+                  displayableProducts.map((product) => (
+                    <Grid key={product.id} item xs={6} md={4} lg={3}>
+                      <ProductCard
+                        product={product}
+                        inCart={cart[product.id!] || 0}
+                        onClickFn={() => navigate(`/catalog/${product.id}`)}
+                      />
+                    </Grid>
+                  ))
+                )}
               </Grid>
             </Grid>
           </Container>
         }
       />
-      <Route path=':id' element={<ProductDetails />} />
-      <Route path='*' element={<ErrorPage />} />
+      <Route path=":id" element={<ProductDetails />} />
+      <Route path="*" element={<ErrorPage />} />
     </Routes>
-  )
-}
+  );
+};
 
-export default Catalog
+export default Catalog;

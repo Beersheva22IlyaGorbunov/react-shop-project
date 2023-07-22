@@ -12,6 +12,7 @@ const OrdersTab = () => {
       <OrdersList
         loading={isLoading}
         isEditable
+        adminVersion={true}
         // orders={orders.sort((a, b) =>
         //   a.statuses[a.statuses.length][1] < b.statuses[b.statuses.length][1]
         //     ? -1

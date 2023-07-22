@@ -1,20 +1,16 @@
-import React from 'react'
-import ProductTable from '../components/adminPage/ProductsTable'
-import { Container, Grid, Paper, Tab, Tabs } from '@mui/material'
-import { Link, Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import ProductsTab from '../components/adminPage/ProductsTab'
 import SideTabsNavigator from '../components/adminPage/SideTabsNavigator'
-import ClientsTab from '../components/adminPage/ClientsTab'
 import MenuPoint from '../model/MenuPoint'
 import ErrorPage from './ErrorPage'
 import CategoriesTab from '../components/adminPage/CategoriesTab'
-import MainPageSettingsTab from '../components/adminPage/MainPageSettingsTab'
 import OrdersTab from '../components/adminPage/OrdersTab'
+import GeneralSettingTab from '../components/adminPage/GeneralSettingsTab'
 
 const menuPoints: MenuPoint[] = [
   {
-    title: 'Main page',
-    element: <MainPageSettingsTab />,
+    title: 'General',
+    element: <GeneralSettingTab />,
     order: 1,
     path: '',
     forRoles: ['admin']
@@ -31,13 +27,6 @@ const menuPoints: MenuPoint[] = [
     element: <ProductsTab />,
     order: 2,
     path: 'products',
-    forRoles: ['admin']
-  },
-  {
-    title: 'Clients',
-    element: <ClientsTab />,
-    order: 3,
-    path: 'clients',
     forRoles: ['admin']
   },
   {

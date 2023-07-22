@@ -4,25 +4,15 @@ import Product from '../model/Product'
 import ProductService from './ProductService'
 import { v4 as uuid } from 'uuid'
 import {
-  FirestoreError,
   collection,
   getFirestore,
   getDocs,
   QueryDocumentSnapshot,
-  DocumentReference,
-  doc,
   setDoc,
   getDoc,
   DocumentSnapshot,
   deleteDoc
 } from 'firebase/firestore'
-import {
-  ref,
-  uploadBytes,
-  getDownloadURL,
-  getStorage,
-  FirebaseStorage
-} from 'firebase/storage'
 import firestoreApp from '../config/firebaseConfig'
 import { FirebaseError } from 'firebase/app'
 import FirebaseService from './FirebaseService'

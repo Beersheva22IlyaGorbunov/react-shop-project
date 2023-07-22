@@ -2,14 +2,13 @@ import {
   FirestoreError,
   collection,
   getDoc,
-  getDocs,
   getFirestore,
   setDoc
 } from 'firebase/firestore'
-import HomePageSettings from '../model/settings/HomePageSettings'
 import SettingsService from './SettingsService'
 import firestoreApp from '../config/firebaseConfig'
 import FirebaseService from './FirebaseService'
+import { Settings } from '../model/redux/SettingsState'
 
 const SETTINGS_COLLECTION_NAME = 'settings'
 const HOME_SETTINGS_DOC = 'home_settings'
@@ -20,7 +19,7 @@ export default class SettingsServiceFire extends FirebaseService implements Sett
     SETTINGS_COLLECTION_NAME
   )
 
-  async setHome (settings: HomePageSettings, image?: File): Promise<void> {
+  async set (settings: Settings, image?: File): Promise<void> {
     const docRef = this.getDocRef(this.collectionRef, HOME_SETTINGS_DOC)
     try {
       if (image != null) {
@@ -35,11 +34,11 @@ export default class SettingsServiceFire extends FirebaseService implements Sett
     }
   }
 
-  async getHome (): Promise<HomePageSettings> {
+  async get (): Promise<Settings> {
     const docRef = this.getDocRef(this.collectionRef, HOME_SETTINGS_DOC)
     const snapshot = await getDoc(docRef)
     const data = snapshot.data()
-    const res: HomePageSettings = {
+    const res: Settings = {
       title: '',
       subtitle: '',
       bannerUrl: ''

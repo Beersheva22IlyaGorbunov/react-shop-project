@@ -1,23 +1,20 @@
 import { useEffect, useState } from 'react'
-import HomePageSettings from '../model/settings/HomePageSettings'
 import { settingService } from '../config/servicesConfig'
-import { useDispatch } from 'react-redux'
-import { settingsActions } from '../redux/slices/SettingsSlice'
+import { Settings } from '../model/redux/SettingsState'
 
-const useSettings = () => {
-  const [settings, setSettings] = useState<HomePageSettings>()
+const useSettings = (): [boolean, string, Settings?] => {
+  const [settings, setSettings] = useState<Settings>()
   const [isLoading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState('')
-  const dispatch = useDispatch()
+  
 
   useEffect(() => {
     setLoading(true)
     setError('')
     settingService
-      .getHome()
+      .get()
       .then((res) => {
         setSettings(res)
-        dispatch(settingsActions.set(res))
       })
       .catch((err) => setError(err))
       .finally(() => setLoading(false))

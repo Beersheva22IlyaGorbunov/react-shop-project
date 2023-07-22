@@ -2,17 +2,15 @@ import React from 'react'
 import Product from '../model/Product'
 import {
   Card,
-  CardActionArea,
   CardActions,
   CardContent,
   CardMedia,
   Typography
 } from '@mui/material'
 import AddToCartButton from './AddToCartButton'
-import { useDispatch } from 'react-redux'
-import { updateCartItem } from '../redux/slices/CartSlice'
-import { useAuthSelector, useCartItemSelector } from '../redux/store'
+import { useAuthSelector } from '../redux/store'
 import { cartService } from '../config/servicesConfig'
+import generalConfig from "../config/generalConfig.json"
 
 interface Props {
   product: Product
@@ -41,7 +39,7 @@ const ProductCard: React.FC<Props> = ({ product, inCart, onClickFn }) => {
       <CardContent sx={{ p: 1, pb: 0 }}>
         <Typography noWrap>{product.name}</Typography>
         <Typography variant='body2' textAlign='end'>
-          {product.price} $
+          {product.price} {generalConfig.currency}
         </Typography>
       </CardContent>
       <CardActions onClick={(e) => e.stopPropagation()}>

@@ -41,7 +41,8 @@ const StatusUpdateForm: React.FC<Props> = ({ initial, onSubmit }) => {
           })}
         </Select>
       </FormControl>
-      <Button onClick={async () => await onSubmit(status)}>Submit</Button>
+      <Button onClick={async () => await onSubmit(status)} variant="contained"
+          sx={{ ml: "auto", display: "block", color: "white" }}>Submit</Button>
     </>
   )
 }

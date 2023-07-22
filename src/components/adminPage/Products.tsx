@@ -7,6 +7,7 @@ import useCodeTypeDispatch from '../../hooks/useCodeTypeDispatch'
 import Confirmation from '../common/Confirmation'
 import { Container, Modal, Paper } from '@mui/material'
 import ProductForm from '../forms/ProductForm'
+import CustomModal from '../CustomModal'
 
 const Products = () => {
   const [isLoading, error, products] = useProductsRx()
@@ -69,7 +70,7 @@ const Products = () => {
         />
       )}
       {(productToUpdate != null) && (
-        <Modal open sx={{ display: 'flex', alignItems: 'center' }} onClose={() => setProductToUpdate(undefined)}>
+        <CustomModal closeConfirmationText='All entered data will be lost.' onClose={() => setProductToUpdate(undefined)}>
           <Container maxWidth='sm'>
             <Paper>
               <ProductForm
@@ -78,7 +79,7 @@ const Products = () => {
               />
             </Paper>
           </Container>
-        </Modal>
+        </CustomModal>
       )}
     </>
   )

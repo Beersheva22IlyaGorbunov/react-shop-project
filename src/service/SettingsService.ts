@@ -1,6 +1,6 @@
-import HomePageSettings from '../model/settings/HomePageSettings'
+import { Settings } from '../model/redux/SettingsState'
 
 export default interface SettingsService {
-  setHome: (settings: HomePageSettings, image?: File) => Promise<void>
-  getHome: () => Promise<HomePageSettings>
+  set: (settings: Settings, image?: File) => Promise<void>
+  get: () => Promise<Settings>
 }

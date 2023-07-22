@@ -19,12 +19,14 @@ interface Props {
   loading?: boolean
   orders: Order[]
   isEditable?: boolean
+  adminVersion?: boolean
 }
 
 const OrdersList: React.FC<Props> = ({
   loading = false,
   orders,
-  isEditable = false
+  isEditable = false,
+  adminVersion = false
 }) => {
   const [removeOrderId, setRemoveOrderId] = useState<string>('')
   const [fieldToUpdate, setFieldToUpdate] = useState<'address' | 'status'>()
@@ -64,8 +66,8 @@ const OrdersList: React.FC<Props> = ({
   return (
     <>
       <List sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-        <Typography>New orders</Typography>
-        {orders.filter((order) => order.statuses[order.statuses.length - 1].status === 'placed').map((order) => (
+        <Typography>Orders</Typography>
+        {orders.filter((order) => order.statuses[order.statuses.length - 1].status !== 'finished').map((order) => (
           <OrderItem
             key={order.id}
             onRemoveOrder={handleRemoveOrder}
@@ -79,23 +81,7 @@ const OrdersList: React.FC<Props> = ({
             }}
             isEditable={isEditable}
             order={order}
-          />
-        ))}
-        <Typography>Ready orders</Typography>
-        {orders.filter((order) => order.statuses[order.statuses.length - 1].status === 'readyToPick').map((order) => (
-          <OrderItem
-            key={order.id}
-            onRemoveOrder={handleRemoveOrder}
-            onAddressChange={(order) => {
-              setOrderToUpdate(order)
-              setFieldToUpdate('address')
-            }}
-            onStatusChange={(order) => {
-              setOrderToUpdate(order)
-              setFieldToUpdate('status')
-            }}
-            isEditable={isEditable}
-            order={order}
+            adminVersion={adminVersion}
           />
         ))}
         <Typography>Orders archive</Typography>

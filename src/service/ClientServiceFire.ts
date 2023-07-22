@@ -1,61 +1,71 @@
-import { DocumentReference, DocumentSnapshot, FirestoreError, QueryDocumentSnapshot, collection, doc, getDoc, getFirestore, setDoc } from 'firebase/firestore'
-import Client from '../model/Client'
-import ClientService from './ClientService'
-import firestoreApp from '../config/firebaseConfig'
-import FirebaseService from './FirebaseService'
-import Product from '../model/Product'
-import { FirebaseError } from 'firebase/app'
+import {
+  DocumentSnapshot,
+  FirestoreError,
+  QueryDocumentSnapshot,
+  collection,
+  getDoc,
+  getFirestore,
+  setDoc,
+} from "firebase/firestore";
+import Client from "../model/Client";
+import ClientService from "./ClientService";
+import firestoreApp from "../config/firebaseConfig";
+import FirebaseService from "./FirebaseService";
+import { FirebaseError } from "firebase/app";
 
-const CLIENT_COLLECTION_NAME = 'clients'
+const CLIENT_COLLECTION_NAME = "clients";
 
-export default class ClientServiceFire extends FirebaseService implements ClientService {
+export default class ClientServiceFire
+  extends FirebaseService
+  implements ClientService
+{
   private readonly collectionRef = collection(
     getFirestore(firestoreApp),
     CLIENT_COLLECTION_NAME
-  )
+  );
 
-  async addClient (client: Client): Promise<Client> {
-    const docRef = this.getDocRef(this.collectionRef, client.id)
+  async addClient(client: Client): Promise<Client> {
+    const docRef = this.getDocRef(this.collectionRef, client.id);
     try {
-      await setDoc(docRef, client)
+      await setDoc(docRef, client);
     } catch (err: any) {
-      const firestoreError: FirestoreError = err
-      const errorMessage = this.getErrorMsg(firestoreError)
-      throw errorMessage
+      const firestoreError: FirestoreError = err;
+      const errorMessage = this.getErrorMsg(firestoreError);
+      throw errorMessage;
     }
-    return client
+    return client;
   }
 
-  async updateClient (client: Client): Promise<Client> {
-    const docRef = this.getDocRef(this.collectionRef, client.id)
+  async updateClient(client: Client): Promise<Client> {
+    const docRef = this.getDocRef(this.collectionRef, client.id);
     try {
-      await setDoc(docRef, client)
+      await setDoc(docRef, client);
     } catch (err: any) {
-      const firestoreError: FirestoreError = err
-      const errorMessage = this.getErrorMsg(firestoreError)
-      throw errorMessage
+      const firestoreError: FirestoreError = err;
+      const errorMessage = this.getErrorMsg(firestoreError);
+      throw errorMessage;
     }
-    return client
+    return client;
   }
 
-  async getClient (uid: string): Promise<Client> {
-    const docRef = this.getDocRef(this.collectionRef, uid)
+  async getClient(uid: string): Promise<Client> {
+    const docRef = this.getDocRef(this.collectionRef, uid);
     try {
-      const response = await getDoc(docRef)
-      return this.convertToClient(response)
+      const response = await getDoc(docRef);
+      return this.convertToClient(response);
     } catch (err: any) {
-      const firestoreError: FirestoreError = err
-      const errorMessage = this.getErrorMsg(firestoreError)
-      throw errorMessage
+      const firestoreError: FirestoreError = err;
+      const errorMessage = this.getErrorMsg(firestoreError);
+      throw errorMessage;
     }
   }
 
-  private convertToClient (
+  private convertToClient(
     snapshot: QueryDocumentSnapshot | DocumentSnapshot
   ): Client {
-    const data = snapshot.data()
+    const data = snapshot.data();
     if (data == null) {
-      throw new FirebaseError('not-found', 'Product not found')
+      throw new FirebaseError("not-found", "Product not found");
     }
     return {
       id: snapshot.id,
@@ -63,7 +73,7 @@ export default class ClientServiceFire extends FirebaseService implements Client
       firstName: data.firstName,
       surName: data.surName,
       phone: data.phone,
-      address: data.address
-    }
+      address: data.address,
+    };
   }
 }

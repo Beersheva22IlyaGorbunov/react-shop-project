@@ -1,0 +1,15 @@
+{
+  "slots": [
+    {"title": "Popular",
+      "urls": ["1c13e583-da94-4d09-b588-5e3f9b68e2ff",
+      "1e39a193-cf85-4852-b974-84963de58a7d",
+      "89c08261-d971-4390-a275-2e35544df3ef",
+      "8e45f6d4-c275-4721-9728-fe57c0e65502"]},
+      {"title": "Romantic collection",
+      "urls": ["5e9d8c8e-9a30-4809-a926-2bd3619100ee",
+      "98c612fd-1eb1-4017-87a8-214fa6ff9d8f",
+      "a4dc9741-c688-44de-810b-eeb0cd7a9187",
+      "bc5eebcd-486d-401a-a24b-23dca3d0932f"]}
+  ],
+  "currency": "$"
+}

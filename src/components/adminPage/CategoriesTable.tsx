@@ -22,22 +22,8 @@ const getColumns = (
   onRemove: (category: Category) => void,
   onUpdate: (category: Category) => void
 ): GridColDef[] => [
-  { field: 'id', headerName: 'ID', flex: 0.7 },
   { field: 'name', headerName: 'Name', flex: 1.6 },
   { field: 'description', headerName: 'Description', flex: 1.6 },
-  {
-    field: 'imageUrl',
-    headerName: '',
-    flex: 0.8,
-    renderCell: (params: GridRenderCellParams<Category>) => {
-      console.log(params)
-      return (
-        <Avatar src={params.value} variant='square'>
-          {params.row.name}
-        </Avatar>
-      )
-    }
-  },
   {
     field: 'actions',
     type: 'actions',

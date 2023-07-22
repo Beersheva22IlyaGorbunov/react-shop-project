@@ -2,9 +2,6 @@ import React, { useState } from 'react'
 import LoginData from '../../model/service/LoginData'
 import ActionResult from '../../model/ActionResult'
 import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
   Alert,
   Avatar,
   Box,
@@ -14,12 +11,10 @@ import {
   TextField,
   Typography
 } from '@mui/material'
-import { ExpandMore, LockOutlined, Login } from '@mui/icons-material'
+import { LockOutlined, Login } from '@mui/icons-material'
 import { LoadingButton } from '@mui/lab'
 import { Link } from 'react-router-dom'
 import Client from '../../model/Client'
-import Address from '../../model/Address'
-import AddressForm from './AddressForm'
 
 interface Props {
   onSignUp: (loginData: LoginData, client: Client) => Promise<ActionResult>
@@ -43,13 +38,11 @@ const emptyClient: Client = {
 const SignUpForm: React.FC<Props> = ({ onSignUp }) => {
   const [loginRes, setLoginRes] = useState<ActionResult | undefined>(undefined)
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [addressIsOpened, setAddressIsOpened] = useState<boolean>(false)
   const [loginData, setLoginData] = useState<LoginData>({
     email: '',
     password: ''
   })
   const [client, setClient] = useState<Client>(emptyClient)
-  const [addressError, setAddressError] = useState(false)
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -57,7 +50,7 @@ const SignUpForm: React.FC<Props> = ({ onSignUp }) => {
     try {
       const res = await onSignUp(loginData, {
         ...client,
-        address: addressIsOpened ? client.address : undefined
+        address: undefined
       })
       setLoginRes(res)
     } catch (e) {
@@ -110,16 +103,11 @@ const SignUpForm: React.FC<Props> = ({ onSignUp }) => {
     }))
   }
 
-  function handleAddressChange (address: Address) {
-
-  }
-
   return (
     <Container component='main' maxWidth='xs'>
       <CssBaseline />
       <Stack
         sx={{
-          // marginTop: 8,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center'
@@ -135,7 +123,6 @@ const SignUpForm: React.FC<Props> = ({ onSignUp }) => {
           component='form'
           onChange={() => setLoginRes(undefined)}
           onSubmit={handleSubmit}
-          // noValidate
         >
           <TextField
             margin='dense'
@@ -210,15 +197,3 @@ const SignUpForm: React.FC<Props> = ({ onSignUp }) => {
 }
 
 export default SignUpForm
-
-// <Accordion
-//             onChange={(__, isOpened) => setAddressIsOpened(isOpened)}
-//             sx={{ boxShadow: "none", mt: 1 }}
-//           >
-//             <AccordionSummary expandIcon={<ExpandMore />}>
-//               <Typography color="gray">Add adress</Typography>
-//             </AccordionSummary>
-//             <AccordionDetails sx={{ p: 0 }}>
-//               <AddressForm initial={client.address || emptyClient.address!} onChange={handleAddressChange} />
-//             </AccordionDetails>
-//           </Accordion>

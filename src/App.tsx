@@ -4,16 +4,13 @@ import NavigatorDispatcher from './components/navigator/NavigatorDispatcher'
 import Home from './pages/Home'
 import Catalog from './pages/Catalog'
 import {
-  CircularProgress,
   CssBaseline,
-  Snackbar,
   ThemeProvider,
   createTheme
 } from '@mui/material'
 import Admin from './pages/Admin'
 import {
   useAuthSelector,
-  useCartSelector,
   useCodeTypeSelector
 } from './redux/store'
 import MenuPoint from './model/MenuPoint'
@@ -33,7 +30,7 @@ import { codeActions } from './redux/slices/CodeSlice'
 import CodeType from './model/CodeType'
 import { signOut } from './redux/slices/AuthSlice'
 import StatusType from './model/StatusType'
-import CodeState from './model/redux/CodeState'
+import { settingsActions } from './redux/slices/SettingsSlice'
 
 const menuPoints: MenuPoint[] = [
   {
@@ -95,13 +92,6 @@ const anonimMenuPoints: MenuPoint[] = [
     path: 'signin',
     forRoles: [null]
   },
-  // {
-  //   title: "Profile",
-  //   element: <Profile />,
-  //   order: 2,
-  //   path: "profile",
-  //   forRoles: ["admin", "user", null],
-  // },
   {
     title: 'Sign Up',
     element: <SignUp />,
@@ -161,9 +151,13 @@ async function initializeCart (
 
 function App () {
   const user = useAuthSelector()
-  const [isLoading, error, settings] = useSettings()
   const code = useCodeTypeSelector()
   const dispatch = useDispatch()
+  const [settingsIsLoading, error, settings] = useSettings();
+
+  useEffect(() => {
+    settings && dispatch(settingsActions.set(settings))
+  }, [settings])
 
   function codeProcessing (codeMsg: { code: CodeType, message: string }) {
     const res: [string, StatusType] = [codeMsg.message, 'error']

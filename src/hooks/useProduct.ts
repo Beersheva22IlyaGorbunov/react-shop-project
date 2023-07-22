@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import Product from '../model/Product'
 import { productService } from '../config/servicesConfig'
 
-const useProduct = (id?: string): [boolean, string, Product?] => {
+const useProduct = (id?: string): [Product | undefined, boolean, string] => {
   const [product, setProduct] = useState<Product>()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [error, setError] = useState('')
@@ -24,7 +24,7 @@ const useProduct = (id?: string): [boolean, string, Product?] => {
     }
   }, [])
 
-  return [isLoading, error, product]
+  return [product, isLoading, error]
 }
 
 export default useProduct

@@ -14,6 +14,7 @@ import Product from "../../model/Product";
 import { productService } from "../../config/servicesConfig";
 import Products from "./Products";
 import useCodeTypeDispatch from "../../hooks/useCodeTypeDispatch";
+import CustomModal from "../CustomModal";
 
 const ProductsTab = () => {
   const [modalIsVisible, setModalIsVisible] = useState<boolean>(false);
@@ -56,15 +57,14 @@ const ProductsTab = () => {
         Add product
       </Button>
       <Products />
-      <Modal
-        sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
-        open={modalIsVisible}
+      {modalIsVisible && <CustomModal
+        closeConfirmationText="All entered data will be lost."
         onClose={() => setModalIsVisible(false)}
       >
         <Container maxWidth="sm" sx={{ mb: 4 }}>
           <Paper sx={{}}>{formRef.current}</Paper>
         </Container>
-      </Modal>
+      </CustomModal>}
     </Paper>
   );
 };

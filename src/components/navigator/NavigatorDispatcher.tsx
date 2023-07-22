@@ -1,12 +1,9 @@
-import { Box, Container, Link, Typography, useMediaQuery, useTheme } from '@mui/material'
+import { Box, Link, Typography, useMediaQuery, useTheme } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import Navigator from './Navigator'
 import NavigatorPortrait from './NavigatorPortrait'
 import MenuPoint from '../../model/MenuPoint'
-import { useAuthSelector } from '../../redux/store'
-import UserMenu from './UserMenu'
-import SignInMenu from './SignInMenu'
 
 interface Props {
   menuPoints: MenuPoint[]

@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from 'react'
+import React, { useState } from 'react'
 import MenuPoint from '../../model/MenuPoint'
 import {
   AppBar,
@@ -32,7 +32,6 @@ const headerStyle: SxProps<Theme> = {
   backdropFilter: 'blur(3px)',
   mt: 1,
   px: 2,
-  // borderRadius: 4,
   mx: 'auto',
   width: '100%'
 }
@@ -65,6 +64,7 @@ const NavigatorPortrait: React.FC<Props> = ({
         key={elem.title}
         label={elem.title}
         component={Link}
+        onClick={handleDrawerClose}
         to={elem.path}
       />
     ))

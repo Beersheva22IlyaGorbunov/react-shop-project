@@ -1,6 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import CodeType from '../../model/CodeType'
-import CodeState from '../../model/redux/CodeState'
 import SettingsState, { Settings } from '../../model/redux/SettingsState'
 
 const initialState: SettingsState = {

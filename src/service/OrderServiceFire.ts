@@ -1,5 +1,4 @@
 import {
-  CollectionReference,
   DocumentData,
   DocumentSnapshot,
   QueryDocumentSnapshot,
@@ -12,10 +11,7 @@ import {
   where
 } from 'firebase/firestore'
 import { v4 as uuid } from 'uuid'
-import Client from '../model/Client'
-import Order, { OrderStatus } from '../model/Order'
-import Product from '../model/Product'
-import ProductQuantity from '../model/ProductQuantity'
+import Order from '../model/Order'
 import OrderService from './OrderService'
 import FirebaseService from './FirebaseService'
 import { FirebaseError } from 'firebase/app'
@@ -24,7 +20,6 @@ import { Observable, catchError, map, of } from 'rxjs'
 import { collectionData } from 'rxfire/firestore'
 
 const ORDERS_COLLECTION_NAME = 'orders'
-const USER_ORDERS_COLLECTION_NAME = 'userOrders'
 
 export default class OrderServiceFire
   extends FirebaseService
