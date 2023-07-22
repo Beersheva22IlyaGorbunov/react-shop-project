@@ -1,17 +1,17 @@
-import { Container, Modal } from "@mui/material";
-import React, { ReactElement, useState } from "react";
-import Confirmation from "./common/Confirmation";
+import { Box, Modal } from '@mui/material'
+import React, { ReactElement, useState } from 'react'
+import Confirmation from './common/Confirmation'
 
-type Props = {
-  onClose: () => void;
+interface Props {
+  onClose: () => void
   children: ReactElement
-  closeConfirmationText?: string;
-};
+  closeConfirmationText?: string
+}
 
 const CustomModal: React.FC<Props> = ({ onClose, closeConfirmationText, children }) => {
-  const [confirmationIsVisible, setConfirmationIsVisible] = useState(false);
+  const [confirmationIsVisible, setConfirmationIsVisible] = useState(false)
 
-  function handleModalClose() {
+  function handleModalClose () {
     if (closeConfirmationText) {
       setConfirmationIsVisible(true)
     } else {
@@ -23,20 +23,21 @@ const CustomModal: React.FC<Props> = ({ onClose, closeConfirmationText, children
     <>
       <Modal
         open
-        sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
-        onClose={ handleModalClose }
+        sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+        onClose={handleModalClose}
       >
-        <Container sx={{maxHeight: "80vh", overflowY: "auto"}}>{children}</Container></Modal>
+        <Box p={0} sx={{ maxHeight: '80vh', overflowY: 'auto' }}>{children}</Box>
+      </Modal>
       {confirmationIsVisible && closeConfirmationText && (
         <Confirmation
-          title={"Close window?"}
+          title='Close window?'
           body={closeConfirmationText}
           onSubmit={onClose}
           onCancel={() => setConfirmationIsVisible(false)}
         />
       )}
     </>
-  );
-};
+  )
+}
 
-export default CustomModal;
+export default CustomModal

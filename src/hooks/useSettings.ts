@@ -2,11 +2,10 @@ import { useEffect, useState } from 'react'
 import { settingService } from '../config/servicesConfig'
 import { Settings } from '../model/redux/SettingsState'
 
-const useSettings = (): [boolean, string, Settings?] => {
+const useSettings = (): [Settings | undefined, boolean, string] => {
   const [settings, setSettings] = useState<Settings>()
   const [isLoading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState('')
-  
 
   useEffect(() => {
     setLoading(true)
@@ -20,7 +19,7 @@ const useSettings = (): [boolean, string, Settings?] => {
       .finally(() => setLoading(false))
   }, [])
 
-  return [isLoading, error, settings]
+  return [settings, isLoading, error]
 }
 
 export default useSettings

@@ -120,7 +120,7 @@ const OrdersList: React.FC<Props> = ({
           open={!!orderToUpdate}
           sx={{ display: 'flex', alignItems: 'center' }}
         >
-          <Container maxWidth='xs'>
+          <Container disableGutters maxWidth='xs'>
             <Paper sx={{ p: 2 }}>
               <AddressForm
                 onSubmit={async (address) =>
@@ -137,7 +137,7 @@ const OrdersList: React.FC<Props> = ({
           open={!!orderToUpdate}
           sx={{ display: 'flex', alignItems: 'center' }}
         >
-          <Container maxWidth='xs'>
+          <Container disableGutters maxWidth='xs'>
             <Paper sx={{ p: 2 }}>
               <StatusUpdateForm
                 initial={orderToUpdate}

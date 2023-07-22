@@ -32,24 +32,24 @@ const Navigator: React.FC<Props> = ({
   tabChangeFn
 }) => {
   return (
-    <AppBar sx={{mt: 2, background: "none", boxShadow: "none"}} position='sticky'>
-      <Container maxWidth="lg" sx={headerStyle}>
-      <Tabs
-        value={selectedTab}
-        onChange={(__, newValue) => tabChangeFn(newValue)}
-        aria-label='basic tabs example'
-      >
-        {menuPoints.map((point: MenuPoint) => (
-          <Tab
-            key={point.title}
-            sx={{ '&:hover': { color: 'lightcoral' }, color: 'whitesmoke' }}
-            label={point.title}
-            component={Link}
-            to={point.path}
-          />
-        ))}
-      </Tabs>
-      <UserMenu menuPoints={authUserPoints} />
+    <AppBar sx={{ mt: 2, background: 'none', boxShadow: 'none' }} position='sticky'>
+      <Container maxWidth='lg' sx={headerStyle}>
+        <Tabs
+          value={selectedTab}
+          onChange={(__, newValue) => tabChangeFn(newValue)}
+          aria-label='basic tabs example'
+        >
+          {menuPoints.map((point: MenuPoint) => (
+            <Tab
+              key={point.title}
+              sx={{ '&:hover': { color: 'lightcoral' }, color: 'whitesmoke' }}
+              label={point.title}
+              component={Link}
+              to={point.path}
+            />
+          ))}
+        </Tabs>
+        <UserMenu menuPoints={authUserPoints} />
       </Container>
     </AppBar>
   )

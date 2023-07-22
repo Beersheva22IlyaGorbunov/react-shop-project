@@ -1,6 +1,5 @@
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
 import Order, { OrderStatus } from '../../model/Order'
-import AddressForm from './AddressForm'
 import { Button, FormControl, InputLabel, MenuItem, Select, Typography } from '@mui/material'
 import orderConfig from '../../config/orderConfig.json'
 const { statuses } = orderConfig
@@ -41,8 +40,11 @@ const StatusUpdateForm: React.FC<Props> = ({ initial, onSubmit }) => {
           })}
         </Select>
       </FormControl>
-      <Button onClick={async () => await onSubmit(status)} variant="contained"
-          sx={{ ml: "auto", display: "block", color: "white" }}>Submit</Button>
+      <Button
+        onClick={async () => await onSubmit(status)} variant='contained'
+        sx={{ ml: 'auto', display: 'block', color: 'white' }}
+      >Submit
+      </Button>
     </>
   )
 }

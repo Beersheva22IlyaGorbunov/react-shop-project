@@ -1,4 +1,4 @@
-import { Box, Button, ButtonGroup} from '@mui/material'
+import { Box, Button, ButtonGroup } from '@mui/material'
 import { Link } from 'react-router-dom'
 
 const SignInMenu = ({ rawPoints }: { rawPoints?: boolean }) => {

@@ -13,13 +13,13 @@ import useProducts from '../hooks/useProducts'
 import { ShoppingCartOutlined } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
 import {
-  cartService,
+  cartService
 } from '../config/servicesConfig'
 import ProductQuantity from '../model/ProductQuantity'
 import CartItem from '../components/CartItem'
 import PlaceOrder from '../components/PlaceOrder'
 import { getProductsPrice } from '../helpers/productHelpers'
-import generalConfig from "../config/generalConfig.json"
+import generalConfig from '../config/generalConfig.json'
 
 function getItemsTotal (products: ProductQuantity[]): number {
   return products.reduce((accum, item) => (accum += item.quantity), 0)
@@ -82,7 +82,7 @@ const Cart = () => {
               onClick={() => setModalIsVisible(true)}
               disabled={products.length === 0}
               size='small'
-              sx={{ mt: 2, color: "white" }}
+              sx={{ mt: 2, color: 'white' }}
               variant='contained'
             >
               Proceed order

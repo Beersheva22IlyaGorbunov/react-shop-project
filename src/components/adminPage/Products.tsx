@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import Product from '../../model/Product'
 import ProductsTable from './ProductsTable'
 import useProductsRx from '../../hooks/admin/useProductsRx'
 import { productService } from '../../config/servicesConfig'
 import useCodeTypeDispatch from '../../hooks/useCodeTypeDispatch'
 import Confirmation from '../common/Confirmation'
-import { Container, Modal, Paper } from '@mui/material'
+import { Container, Paper } from '@mui/material'
 import ProductForm from '../forms/ProductForm'
 import CustomModal from '../CustomModal'
 
@@ -71,7 +71,7 @@ const Products = () => {
       )}
       {(productToUpdate != null) && (
         <CustomModal closeConfirmationText='All entered data will be lost.' onClose={() => setProductToUpdate(undefined)}>
-          <Container maxWidth='sm'>
+          <Container maxWidth='sm' disableGutters>
             <Paper>
               <ProductForm
                 initial={productToUpdate}

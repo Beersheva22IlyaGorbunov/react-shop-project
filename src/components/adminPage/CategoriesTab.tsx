@@ -3,7 +3,6 @@ import useCategories from '../../hooks/useCategories'
 import CategoriesTable from './CategoriesTable'
 import { useState } from 'react'
 import CategoryForm from '../forms/CategoryForm'
-import ActionResult from '../../model/ActionResult'
 import Category from '../../model/Category'
 import { categoryService } from '../../config/servicesConfig'
 import useCodeTypeDispatch from '../../hooks/useCodeTypeDispatch'
@@ -48,7 +47,7 @@ const CategoriesTab = () => {
         open={modalIsVisible}
         onClose={() => setModalIsVisible(false)}
       >
-        <Container maxWidth='sm' sx={{ mb: 4 }}>
+        <Container maxWidth='sm' sx={{ mb: 4 }} disableGutters>
           <Paper>
             <CategoryForm onSubmit={handleAddCategory} />
           </Paper>

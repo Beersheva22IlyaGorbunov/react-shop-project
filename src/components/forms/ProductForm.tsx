@@ -13,7 +13,6 @@ import {
 } from '@mui/material'
 import React, { useState } from 'react'
 import Product from '../../model/Product'
-import ActionResult from '../../model/ActionResult'
 import useCategories from '../../hooks/useCategories'
 import { LoadingButton } from '@mui/lab'
 import ImagePreview from '../ImagePreview'
@@ -114,7 +113,6 @@ const ProductForm: React.FC<Props> = ({ onSubmit, initial = emptyProduct }) => {
             name='name'
             size='small'
             label='Name'
-            variant='standard'
             value={product.name}
             onChange={handleNameChange}
           />
@@ -132,7 +130,6 @@ const ProductForm: React.FC<Props> = ({ onSubmit, initial = emptyProduct }) => {
                 e.target.select()
               }
             }}
-            variant='standard'
             value={product.price}
             onChange={handlePriceChange}
           />
@@ -144,7 +141,6 @@ const ProductForm: React.FC<Props> = ({ onSubmit, initial = emptyProduct }) => {
             name='description'
             size='small'
             label='Description'
-            variant='standard'
             value={product.description}
             onChange={handleDescriptionChange}
           />
@@ -152,7 +148,6 @@ const ProductForm: React.FC<Props> = ({ onSubmit, initial = emptyProduct }) => {
         <Grid item xs={12}>
           <FormControl
             required
-            variant='standard'
             margin='dense'
             fullWidth
             size='small'
@@ -203,7 +198,7 @@ const ProductForm: React.FC<Props> = ({ onSubmit, initial = emptyProduct }) => {
           />
         ))}
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 1 }}>
-        <Button variant='contained' component='label'>
+        <Button variant='contained' component='label' sx={{color: "white"}}>
           Upload File
           <input
             onChange={handleFilesChange}

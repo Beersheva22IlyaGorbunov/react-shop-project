@@ -105,32 +105,6 @@ const FilterPanel = ({
       );
     }
     onChange(filterFn);
-    console.log(checkedCategories, priceRange);
-    if (priceRange[0] !== minPrice) {
-      setSearchParams((prev) => ({
-        ...prev,
-        [MIN_PRICE_PARAM]: priceRange[0].toString(),
-      }));
-    }
-    if (priceRange[1] !== maxPrice) {
-      setSearchParams((prev) => ({
-        ...prev,
-        [MAX_PRICE_PARAM]: priceRange[1].toString(),
-      }));
-    }
-    if (
-      !(
-        Object.values(checkedCategories).every((isChecked) => isChecked) ||
-        Object.values(checkedCategories).every((isChecked) => !isChecked)
-      )
-    ) {
-      setSearchParams((prev) => ({
-        ...prev,
-        [CATEGORY_PARAM]: Object.entries(checkedCategories)
-          .filter(([__, state]) => state)
-          .map(([cat, __]) => cat),
-      }));
-    }
   }, [priceRange, checkedCategories]);
 
   const handleCategoriesChange = (
@@ -307,14 +281,16 @@ const Catalog = () => {
           <Container sx={{ mt: 2 }}>
             <Grid container spacing={2}>
               <Grid item sm={4} md={3}>
-                {isLoading ? <Skeleton variant="rounded" height={"300px"} /> :
+                {isLoading ? (
+                  <Skeleton variant="rounded" height="300px" />
+                ) : (
                   <FilterPanel
                     minPrice={minPrice}
                     maxPrice={maxPrice}
                     onChange={handleFilterFunc}
                     categories={categories}
                   />
-                }
+                )}
               </Grid>
               <Grid item container xs={12} sm={8} md={9} spacing={2}>
                 {isLoading ? (

@@ -4,10 +4,8 @@ import {
   DataGrid,
   GridActionsCellItem,
   GridColDef,
-  GridRenderCellParams,
   GridRowParams
 } from '@mui/x-data-grid'
-import { Avatar } from '@mui/material'
 import { Delete, Edit } from '@mui/icons-material'
 import Confirmation from '../common/Confirmation'
 import { categoryService } from '../../config/servicesConfig'

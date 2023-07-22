@@ -70,7 +70,7 @@ const GeneralSettingTab = () => {
         <Typography variant='h5' mb={2}>
           General settings
         </Typography>
-        <CircularProgress sx={{display: "block", mx: "auto"}} />
+        <CircularProgress sx={{ display: 'block', mx: 'auto' }} />
       </Paper>
     )
   }

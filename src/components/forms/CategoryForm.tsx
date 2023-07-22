@@ -2,15 +2,12 @@ import {
   Alert,
   Box,
   Button,
-  FormControl,
   Grid,
-  Select,
   TextField,
   Typography
 } from '@mui/material'
 import React, { useState } from 'react'
 import Category from '../../model/Category'
-import ActionResult from '../../model/ActionResult'
 
 interface Props {
   initial?: Category
@@ -49,7 +46,7 @@ const CategoryForm: React.FC<Props> = ({
 
   async function handleFormSubmit (e: any) {
     e.preventDefault()
-    const res = await onSubmit(category, file)
+    await onSubmit(category, file)
     e.target.reset()
   }
 
@@ -81,7 +78,6 @@ const CategoryForm: React.FC<Props> = ({
             name='name'
             size='small'
             label='Name'
-            variant='standard'
             value={category.name}
             onChange={handleNameChange}
           />
@@ -93,7 +89,6 @@ const CategoryForm: React.FC<Props> = ({
             name='description'
             size='small'
             label='Description'
-            variant='standard'
             value={category.description}
             onChange={handleDescriptionChange}
           />

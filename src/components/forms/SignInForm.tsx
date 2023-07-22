@@ -39,11 +39,10 @@ export const SignInForm: React.FC<Props> = ({ onSignIn }) => {
   }
 
   return (
-    <Container component='main' maxWidth='xs'>
+    <Container disableGutters component='main' maxWidth='xs'>
       <CssBaseline />
       <Stack
         sx={{
-          // marginTop: 8,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center'
@@ -65,7 +64,6 @@ export const SignInForm: React.FC<Props> = ({ onSignIn }) => {
             label='Email Address'
             name='email'
             autoComplete='email'
-            // autoFocus
           />
           <TextField
             margin='normal'

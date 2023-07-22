@@ -10,7 +10,7 @@ import {
 import AddToCartButton from './AddToCartButton'
 import { useAuthSelector } from '../redux/store'
 import { cartService } from '../config/servicesConfig'
-import generalConfig from "../config/generalConfig.json"
+import generalConfig from '../config/generalConfig.json'
 
 interface Props {
   product: Product

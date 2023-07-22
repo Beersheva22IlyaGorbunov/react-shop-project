@@ -21,7 +21,7 @@ import SignUp from './pages/SignUp'
 import Cart from './pages/Cart'
 import { useDispatch } from 'react-redux'
 import { authService, cartService } from './config/servicesConfig'
-import { useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { setCart } from './redux/slices/CartSlice'
 import { AnyAction } from '@reduxjs/toolkit'
 import useSettings from './hooks/useSettings'
@@ -107,7 +107,7 @@ function routesFromPoints (points: MenuPoint[]): JSX.Element[] {
     <Route
       key={index}
       index={point.path === ''}
-      path={point.hasChildren ? point.path + '/*' : point.path}
+      path={point.hasChildren === true ? point.path + '/*' : point.path}
       element={point.element}
     />
   ))
@@ -129,7 +129,7 @@ function getMenuPoints (role: string | null): MenuPoint[] {
     .filter((point) => point.forRoles.includes(role))
     .sort((a, b) => {
       let res = 0
-      if (a.order && b.order) {
+      if (a.order !== undefined && b.order !== undefined) {
         res = a.order - b.order
       }
       return res
@@ -139,7 +139,7 @@ function getMenuPoints (role: string | null): MenuPoint[] {
 async function initializeCart (
   uid: string,
   dispatchFn: (action: AnyAction) => void
-) {
+): Promise<void> {
   cartService.getCartRx(uid).subscribe({
     next: (cart) => {
       if (typeof cart !== 'string') {
@@ -149,17 +149,17 @@ async function initializeCart (
   })
 }
 
-function App () {
+const App: React.FC = () => {
   const user = useAuthSelector()
   const code = useCodeTypeSelector()
   const dispatch = useDispatch()
-  const [settingsIsLoading, error, settings] = useSettings();
+  const [settings] = useSettings()
 
   useEffect(() => {
-    settings && dispatch(settingsActions.set(settings))
+    (settings != null) && dispatch(settingsActions.set(settings))
   }, [settings])
 
-  function codeProcessing (codeMsg: { code: CodeType, message: string }) {
+  function codeProcessing (codeMsg: { code: CodeType, message: string }): [string, StatusType] {
     const res: [string, StatusType] = [codeMsg.message, 'error']
     switch (codeMsg.code) {
       case CodeType.OK: {
@@ -178,7 +178,7 @@ function App () {
   const [alertMessage, severity] = useMemo(() => codeProcessing(code), [code])
 
   useEffect(() => {
-    if (user?.uid) {
+    if (user?.uid !== undefined) {
       initializeCart(user.uid, dispatch)
     }
   }, [user])
