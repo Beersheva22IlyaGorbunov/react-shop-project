@@ -21,7 +21,6 @@ const headerStyle: SxProps<Theme> = {
   backdropFilter: 'blur(3px)',
   px: 2,
   borderRadius: 4,
-  mx: 'auto',
   boxShadow: 3
 }
 
@@ -32,7 +31,7 @@ const Navigator: React.FC<Props> = ({
   tabChangeFn
 }) => {
   return (
-    <AppBar sx={{ mt: 2, background: 'none', boxShadow: 'none' }} position='sticky'>
+    <AppBar sx={{ mt: 2, background: 'none', boxShadow: 'none', px: "5%" }} position='sticky'>
       <Container maxWidth='lg' sx={headerStyle}>
         <Tabs
           value={selectedTab}

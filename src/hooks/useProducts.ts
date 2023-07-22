@@ -31,7 +31,7 @@ const useProducts = (id?: string[], dependencies?: any[]): [Product[], boolean, 
       .then((products) => setProducts(products))
       .catch((err) => setError(err))
       .finally(() => setIsLoading(false))
-  }, (dependencies != null) ? dependencies : [])
+  }, (dependencies != null) ? dependencies : [id])
 
   return [products, isLoading, error]
 }

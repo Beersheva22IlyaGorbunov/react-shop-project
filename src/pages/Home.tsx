@@ -26,6 +26,7 @@ const Slot: React.FC<SlotType> = ({ title, urls }) => {
   const [products, isLoading] = useProducts(urls)
   const navigate = useNavigate()
   const cart = useCartSelector()
+
   return (
     <>
       <Typography variant='h5' my={1}>
@@ -76,6 +77,7 @@ const Home = () => {
         justifyContent='center'
         flexDirection='column'
         alignItems='center'
+        px="5%"
       >
         {settings?.title && settings?.subtitle && (
           <Stack
