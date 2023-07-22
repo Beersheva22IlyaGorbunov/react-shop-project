@@ -1,39 +1,39 @@
-import { useEffect, useState } from "react";
-import Product from "../model/Product";
-import { productService } from "../config/servicesConfig";
+import { useEffect, useState } from 'react'
+import Product from '../model/Product'
+import { productService } from '../config/servicesConfig'
 
 const useProducts = (id?: string[], dependencies?: any[]): [boolean, string, Product[]] => {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState("");
+  const [products, setProducts] = useState<Product[]>([])
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [error, setError] = useState('')
 
-  async function fetchProducts(): Promise<Product[]> {
-    let response: string | Product[] = [];
+  async function fetchProducts (): Promise<Product[]> {
+    let response: string | Product[] = []
     try {
       if (id === undefined) {
-        response = await productService.getProducts();
+        response = await productService.getProducts()
       } else {
-        response = await productService.getProductsById(id);
+        response = await productService.getProductsById(id)
       }
-      if (typeof response === "string") {
-        throw response;
+      if (typeof response === 'string') {
+        throw response
       } else {
-        return response;
+        return response
       }
     } catch (e) {
-      throw e;
+      throw e
     }
   }
 
   useEffect(() => {
-    setIsLoading(true);
+    setIsLoading(true)
     fetchProducts()
       .then((products) => setProducts(products))
       .catch((err) => setError(err))
-      .finally(() => setIsLoading(false));
-  }, dependencies ? dependencies : []);
+      .finally(() => setIsLoading(false))
+  }, (dependencies != null) ? dependencies : [])
 
-  return [isLoading, error, products];
-};
+  return [isLoading, error, products]
+}
 
-export default useProducts;
+export default useProducts

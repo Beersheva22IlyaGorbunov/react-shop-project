@@ -32,7 +32,7 @@ export const SignInForm: React.FC<Props> = ({ onSignIn }) => {
         email,
         password
       }
-      const res = await onSignIn("email", loginData)
+      const res = await onSignIn('email', loginData)
       setLoginRes(res)
       setIsLoading(false)
     }
@@ -46,7 +46,7 @@ export const SignInForm: React.FC<Props> = ({ onSignIn }) => {
           // marginTop: 8,
           display: 'flex',
           flexDirection: 'column',
-          alignItems: 'center',
+          alignItems: 'center'
         }}
       >
         <Avatar sx={{ bgcolor: 'secondary.main' }}>
@@ -60,7 +60,7 @@ export const SignInForm: React.FC<Props> = ({ onSignIn }) => {
             margin='normal'
             required
             fullWidth
-            size="small"
+            size='small'
             id='email'
             label='Email Address'
             name='email'
@@ -71,7 +71,7 @@ export const SignInForm: React.FC<Props> = ({ onSignIn }) => {
             margin='normal'
             required
             fullWidth
-            size="small"
+            size='small'
             name='password'
             label='Password'
             type='password'
@@ -85,7 +85,7 @@ export const SignInForm: React.FC<Props> = ({ onSignIn }) => {
             endIcon={<Login />}
             loadingPosition='end'
             variant='contained'
-            sx={{ my: 2}}
+            sx={{ my: 2 }}
           >
             Sign In
           </LoadingButton>

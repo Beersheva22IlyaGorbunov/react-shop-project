@@ -1,26 +1,26 @@
-import { useEffect, useState } from "react";
-import HomePageSettings from "../model/settings/HomePageSettings";
-import { categoryService, settingService } from "../config/servicesConfig";
-import Category from "../model/Category";
+import { useEffect, useState } from 'react'
+import HomePageSettings from '../model/settings/HomePageSettings'
+import { categoryService, settingService } from '../config/servicesConfig'
+import Category from '../model/Category'
 
 const useCategories = (): [boolean, string, Category[]] => {
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState("");
+  const [categories, setCategories] = useState<Category[]>([])
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [error, setError] = useState('')
 
   useEffect(() => {
-    setIsLoading(true);
-    setError("");
+    setIsLoading(true)
+    setError('')
     categoryService
       .getCategories()
       .then((res) => {
-        setCategories(res);
+        setCategories(res)
       })
       .catch((err) => setError(err))
-      .finally(() => setIsLoading(false));
-  }, []);
+      .finally(() => setIsLoading(false))
+  }, [])
 
-  return [isLoading, error, categories];
-};
+  return [isLoading, error, categories]
+}
 
-export default useCategories;
+export default useCategories

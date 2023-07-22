@@ -1,8 +1,8 @@
-type Category = {
-  id?: string;
-  name: string;
-  description: string;
-  imageUrl: string;
-};
+interface Category {
+  id?: string
+  name: string
+  description: string
+  imageUrl: string
+}
 
-export default Category;
+export default Category

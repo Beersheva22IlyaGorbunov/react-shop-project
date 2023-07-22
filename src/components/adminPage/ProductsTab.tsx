@@ -7,41 +7,37 @@ import {
   Modal,
   Paper,
   Stack,
+  Typography,
 } from "@mui/material";
 import ProductForm from "../forms/ProductForm";
 import Product from "../../model/Product";
 import { productService } from "../../config/servicesConfig";
-import CategoryForm from "../forms/CategoryForm";
-import ActionResult from "../../model/ActionResult";
 import Products from "./Products";
-import useCategories from "../../hooks/useCategories";
+import useCodeTypeDispatch from "../../hooks/useCodeTypeDispatch";
 
 const ProductsTab = () => {
   const [modalIsVisible, setModalIsVisible] = useState<boolean>(false);
+  const codeTypeDispatch = useCodeTypeDispatch();
   const productForm = <ProductForm onSubmit={handleAddProduct} />;
   const formRef = useRef(productForm);
-
-  function handleAddCategory(category: string) {
-    console.log(category);
-  }
 
   async function handleAddProduct(
     product: Product,
     images: File[]
-  ): Promise<ActionResult> {
-    const res: ActionResult = {
-      status: "success",
-      message: "Product was added succesfully",
+  ): Promise<void> {
+    const res = {
+      success: "",
+      error: "",
     };
     try {
       await productService.addProduct(product, images);
+      res.success = `Product ${product.name} was added`;
     } catch (e) {
       if (typeof e === "string") {
-        res.message = e;
-        res.status = "error";
+        res.error = e;
       }
     }
-    return res;
+    codeTypeDispatch(res.success, res.error);
   }
 
   function openModal(form: JSX.Element) {
@@ -50,18 +46,15 @@ const ProductsTab = () => {
   }
 
   return (
-    <Stack spacing={1}>
-      <div>
-        <ButtonGroup variant="contained">
-          <Button
-            variant="contained"
-            sx={{ color: "white" }}
-            onClick={() => openModal(productForm)}
-          >
-            Add product
-          </Button>
-        </ButtonGroup>
-      </div>
+    <Paper sx={{p: 2}}>
+      <Typography  variant='h5'>Products settings</Typography>
+      <Button
+        variant="contained"
+        sx={{ color: "white", my: 2 }}
+        onClick={() => openModal(productForm)}
+      >
+        Add product
+      </Button>
       <Products />
       <Modal
         sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
@@ -72,7 +65,7 @@ const ProductsTab = () => {
           <Paper sx={{}}>{formRef.current}</Paper>
         </Container>
       </Modal>
-    </Stack>
+    </Paper>
   );
 };
 

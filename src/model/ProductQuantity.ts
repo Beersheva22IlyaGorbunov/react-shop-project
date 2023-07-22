@@ -1,5 +1,5 @@
-import Product from "./Product"
+import Product from './Product'
 
-type ProductQuantity = Product & {quantity: number}
+type ProductQuantity = Product & { quantity: number }
 
 export default ProductQuantity

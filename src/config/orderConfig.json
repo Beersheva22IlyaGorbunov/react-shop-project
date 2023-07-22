@@ -1,0 +1,9 @@
+{
+  "statuses": {
+    "placed": "Placed",
+    "inProgress": "In progress",
+    "inDelivery": "In delivery",
+    "readyToPick": "Ready to pick",
+    "finished": "Finished"
+  }
+}

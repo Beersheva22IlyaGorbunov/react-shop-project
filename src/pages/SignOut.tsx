@@ -27,7 +27,7 @@ const SignOut = () => {
   function handleLogOut (): void {
     dispatch(signOut())
   }
-  
+
   return (
     <Modal
       open

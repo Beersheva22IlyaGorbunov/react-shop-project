@@ -1,6 +1,6 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import AuthState from "../../model/redux/AuthState";
-import UserData from "../../model/service/UserData";
+import { PayloadAction, createSlice } from '@reduxjs/toolkit'
+import AuthState from '../../model/redux/AuthState'
+import UserData from '../../model/service/UserData'
 
 const AUTH_ITEM_STORAGE = 'auth'
 

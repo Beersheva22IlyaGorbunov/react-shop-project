@@ -1,7 +1,7 @@
-import Cart from "../Cart";
+import Cart from '../Cart'
 
-type CartState = {
-  cart: Cart;
-};
+interface CartState {
+  cart: Cart
+}
 
-export default CartState;
+export default CartState

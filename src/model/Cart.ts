@@ -1,3 +1,3 @@
-type Cart = {[id: string]: number};
+interface Cart {[id: string]: number}
 
-export default Cart;
+export default Cart

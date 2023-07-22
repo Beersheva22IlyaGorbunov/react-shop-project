@@ -1,81 +1,99 @@
-import "./App.css";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import NavigatorDispatcher from "./components/navigator/NavigatorDispatcher";
-import Home from "./pages/Home";
-import Catalog from "./pages/Catalog";
-import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
-import Admin from "./pages/Admin";
-import { useAuthSelector, useCartSelector } from "./redux/store";
-import MenuPoint from "./model/MenuPoint";
-import SignOut from "./pages/SignOut";
-import Orders from "./pages/Orders";
-import SignIn from "./pages/SignIn";
-import SignUp from "./pages/SignUp";
-import Cart from "./pages/Cart";
-import { useDispatch } from "react-redux";
-import { cartService } from "./config/servicesConfig";
-import { useEffect } from "react";
-import { setCart } from "./redux/slices/CartSlice";
-import { AnyAction } from "@reduxjs/toolkit";
+import './App.css'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import NavigatorDispatcher from './components/navigator/NavigatorDispatcher'
+import Home from './pages/Home'
+import Catalog from './pages/Catalog'
+import {
+  CircularProgress,
+  CssBaseline,
+  Snackbar,
+  ThemeProvider,
+  createTheme
+} from '@mui/material'
+import Admin from './pages/Admin'
+import {
+  useAuthSelector,
+  useCartSelector,
+  useCodeTypeSelector
+} from './redux/store'
+import MenuPoint from './model/MenuPoint'
+import SignOut from './pages/SignOut'
+import Orders from './pages/Orders'
+import SignIn from './pages/SignIn'
+import SignUp from './pages/SignUp'
+import Cart from './pages/Cart'
+import { useDispatch } from 'react-redux'
+import { authService, cartService } from './config/servicesConfig'
+import { useEffect, useMemo } from 'react'
+import { setCart } from './redux/slices/CartSlice'
+import { AnyAction } from '@reduxjs/toolkit'
+import useSettings from './hooks/useSettings'
+import SnackbarAlert from './components/common/SnackbarAlert'
+import { codeActions } from './redux/slices/CodeSlice'
+import CodeType from './model/CodeType'
+import { signOut } from './redux/slices/AuthSlice'
+import StatusType from './model/StatusType'
+import CodeState from './model/redux/CodeState'
 
 const menuPoints: MenuPoint[] = [
   {
-    title: "Home",
+    title: 'Home',
     element: <Home />,
     order: 1,
-    path: "",
-    forRoles: ["admin", "user", null],
+    path: '',
+    forRoles: ['admin', 'user', null]
   },
   {
-    title: "Catalog",
+    title: 'Catalog',
     element: <Catalog />,
-    hasChilds: true,
+    hasChildren: true,
     order: 2,
-    path: "catalog",
-    forRoles: ["admin", "user", null],
+    path: 'catalog',
+    forRoles: ['admin', 'user', null]
   },
   {
-    title: "Admin",
+    title: 'Admin',
     element: <Admin />,
-    hasChilds: true,
+    hasChildren: true,
     order: 3,
-    path: "admin",
-    forRoles: ["admin"],
-  },
-];
+    path: 'admin',
+    forRoles: ['admin']
+  }
+]
 
 const authMenuPoints: MenuPoint[] = [
   {
-    title: "Orders",
+    title: 'Orders',
     element: <Orders />,
     order: 1,
-    path: "orders",
-    forRoles: ["admin", "user"],
+    path: 'orders',
+    forRoles: ['admin', 'user']
   },
   {
-    title: "Cart",
+    title: 'Cart',
     element: <Cart />,
     order: 2,
-    path: "cart",
-    forRoles: ["admin", "user"],
+    path: 'cart',
+    hiddenInMenu: true,
+    forRoles: ['admin', 'user']
   },
   {
-    title: "Signout",
+    title: 'Signout',
     element: <SignOut />,
-    hasChilds: true,
+    hasChildren: true,
     order: 3,
-    path: "signout",
-    forRoles: ["admin", "user"],
-  },
+    path: 'signout',
+    forRoles: ['admin', 'user']
+  }
 ]
 
 const anonimMenuPoints: MenuPoint[] = [
   {
-    title: "Sign In",
+    title: 'Sign In',
     element: <SignIn />,
     order: 1,
-    path: "signin",
-    forRoles: [null],
+    path: 'signin',
+    forRoles: [null]
   },
   // {
   //   title: "Profile",
@@ -85,21 +103,21 @@ const anonimMenuPoints: MenuPoint[] = [
   //   forRoles: ["admin", "user", null],
   // },
   {
-    title: "Sign Up",
+    title: 'Sign Up',
     element: <SignUp />,
-    hasChilds: true,
+    hasChildren: true,
     order: 3,
-    path: "signup",
-    forRoles: [null],
-  },
+    path: 'signup',
+    forRoles: [null]
+  }
 ]
 
-function routesFromPoints(points: MenuPoint[]): JSX.Element[] {
+function routesFromPoints (points: MenuPoint[]): JSX.Element[] {
   return points.map((point, index) => (
     <Route
       key={index}
-      index={point.path === ""}
-      path={point.hasChilds ? point.path + "/*" : point.path}
+      index={point.path === ''}
+      path={point.hasChildren ? point.path + '/*' : point.path}
       element={point.element}
     />
   ))
@@ -108,48 +126,72 @@ function routesFromPoints(points: MenuPoint[]): JSX.Element[] {
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#ef9a83",
+      main: '#ef9a83'
     },
     secondary: {
-      main: "#83d8ef",
-    },
-  },
-});
+      main: '#83d8ef'
+    }
+  }
+})
 
-function getMenuPoints(role: string | null): MenuPoint[] {
+function getMenuPoints (role: string | null): MenuPoint[] {
   return menuPoints
     .filter((point) => point.forRoles.includes(role))
     .sort((a, b) => {
-      let res = 0;
+      let res = 0
       if (a.order && b.order) {
-        res = a.order - b.order;
+        res = a.order - b.order
       }
-      return res;
-    });
+      return res
+    })
 }
 
-async function initializeCart(uid: string, dispatchFn: (action: AnyAction) => void) {
+async function initializeCart (
+  uid: string,
+  dispatchFn: (action: AnyAction) => void
+) {
   cartService.getCartRx(uid).subscribe({
     next: (cart) => {
-      if (typeof cart !== "string") {
+      if (typeof cart !== 'string') {
         dispatchFn(setCart(cart))
       }
     }
   })
 }
 
+function App () {
+  const user = useAuthSelector()
+  const [isLoading, error, settings] = useSettings()
+  const code = useCodeTypeSelector()
+  const dispatch = useDispatch()
 
-function App() {
-  const user = useAuthSelector();
-  const dispatch = useDispatch();
-  
+  function codeProcessing (codeMsg: { code: CodeType, message: string }) {
+    const res: [string, StatusType] = [codeMsg.message, 'error']
+    switch (codeMsg.code) {
+      case CodeType.OK: {
+        res[1] = 'success'
+        break
+      }
+      case CodeType.AUTH_ERROR: {
+        dispatch(signOut())
+        authService.logout()
+        break
+      }
+    }
+    return res
+  }
+
+  const [alertMessage, severity] = useMemo(() => codeProcessing(code), [code])
+
   useEffect(() => {
-    initializeCart(user?.uid || "", dispatch)
-  }, [])
+    if (user?.uid) {
+      initializeCart(user.uid, dispatch)
+    }
+  }, [user])
 
   const currentPoints: MenuPoint[] = getMenuPoints(
     user != null ? user.role : null
-  );
+  )
 
   return (
     <ThemeProvider theme={theme}>
@@ -157,13 +199,18 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route
-            path="/"
-            element={<NavigatorDispatcher menuPoints={currentPoints} authMenuPoints={user ? authMenuPoints : anonimMenuPoints} />}
+            path='/'
+            element={
+              <NavigatorDispatcher
+                menuPoints={currentPoints}
+                authMenuPoints={(user != null) ? authMenuPoints : anonimMenuPoints}
+              />
+            }
           >
             {routesFromPoints(currentPoints)}
-            {routesFromPoints(user ? authMenuPoints : anonimMenuPoints)}
+            {routesFromPoints((user != null) ? authMenuPoints : anonimMenuPoints)}
             <Route
-              path="*"
+              path='*'
               element={
                 <div>
                   <h2>404 Page not found</h2>
@@ -173,8 +220,14 @@ function App() {
           </Route>
         </Routes>
       </BrowserRouter>
+      {alertMessage && (
+        <SnackbarAlert
+          onClose={() => dispatch(codeActions.reset())}
+          message={{ message: alertMessage, status: severity }}
+        />
+      )}
     </ThemeProvider>
-  );
+  )
 }
 
-export default App;
+export default App

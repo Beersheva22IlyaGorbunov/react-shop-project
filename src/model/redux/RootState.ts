@@ -1,9 +1,13 @@
-import AuthState from "./AuthState";
-import CartState from "./CartState";
+import AuthState from './AuthState'
+import CartState from './CartState'
+import CodeState from './CodeState'
+import SettingsState from './SettingsState'
 
-type RootState = {
-  authState: AuthState;
-  cartState: CartState;
-};
+interface RootState {
+  authState: AuthState
+  cartState: CartState
+  codeState: CodeState
+  settingsState: SettingsState
+}
 
-export default RootState;
+export default RootState

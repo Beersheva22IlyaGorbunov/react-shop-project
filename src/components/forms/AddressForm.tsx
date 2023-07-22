@@ -1,23 +1,23 @@
-import { Box, Button, TextField } from "@mui/material";
-import React, { MutableRefObject, RefObject, useState } from "react";
-import Address from "../../model/Address";
+import { Box, Button, TextField, Typography } from '@mui/material'
+import React, { MutableRefObject, RefObject, useState } from 'react'
+import Address from '../../model/Address'
 
-type Props = {
-  initial?: Address;
-  required?: boolean;
-  hideButton?: boolean;
-  formRef?: MutableRefObject<HTMLFormElement | undefined>;
-  onChange?: (address: Address) => void;
-  onSubmit?: (address: Address) => Promise<void>;
-};
+interface Props {
+  initial?: Address
+  required?: boolean
+  hideButton?: boolean
+  formRef?: MutableRefObject<HTMLFormElement | undefined>
+  onChange?: (address: Address) => void
+  onSubmit?: (address: Address) => Promise<void>
+}
 
 const emptyAddress: Address = {
-  country: "",
-  city: "",
-  street: "",
-  building: "",
-  flat: 0,
-};
+  country: '',
+  city: '',
+  street: '',
+  building: '',
+  flat: 0
+}
 
 const AddressForm: React.FC<Props> = ({
   initial = emptyAddress,
@@ -25,26 +25,26 @@ const AddressForm: React.FC<Props> = ({
   required = false,
   hideButton = false,
   onChange,
-  onSubmit,
+  onSubmit
 }) => {
-  const [address, setAddress] = useState<Address>(initial);
+  const [address, setAddress] = useState<Address>(initial)
 
   const handleFieldChange =
     (field: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
       setAddress((prev) => ({
         ...prev,
-        [field]: e.target.value,
-      }));
-    };
+        [field]: e.target.value
+      }))
+    }
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    console.log("Submit");
-    onSubmit && onSubmit(address).catch((e) => console.log(e));
+  function handleSubmit (event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    console.log('Submit');
+    (onSubmit != null) && onSubmit(address).catch((e) => console.log(e))
   }
 
-  function handleChange() {
-    onChange && onChange(address)
+  function handleChange () {
+    (onChange != null) && onChange(address)
   }
 
   return (
@@ -52,56 +52,59 @@ const AddressForm: React.FC<Props> = ({
       ref={formRef}
       onSubmit={handleSubmit}
       onChange={handleChange}
-      component="form"
+      component='form'
     >
+      <Typography variant='h5' mb={2}>
+        {initial !== emptyAddress ? 'Edit' : 'Add'} address
+      </Typography>
       <TextField
-        margin="dense"
+        margin='dense'
         fullWidth
         required={required}
-        size="small"
-        label="Country"
-        onChange={handleFieldChange("country")}
+        size='small'
+        label='Country'
+        onChange={handleFieldChange('country')}
         value={address.country}
       />
       <TextField
-        margin="dense"
+        margin='dense'
         fullWidth
         required={required}
-        size="small"
-        label="City"
-        onChange={handleFieldChange("city")}
+        size='small'
+        label='City'
+        onChange={handleFieldChange('city')}
         value={address.city}
       />
       <TextField
-        margin="dense"
+        margin='dense'
         fullWidth
         required={required}
-        size="small"
-        label="Street"
-        onChange={handleFieldChange("street")}
+        size='small'
+        label='Street'
+        onChange={handleFieldChange('street')}
         value={address.street}
       />
       <TextField
-        margin="dense"
+        margin='dense'
         fullWidth
         required={required}
-        size="small"
-        label="Building"
-        onChange={handleFieldChange("building")}
+        size='small'
+        label='Building'
+        onChange={handleFieldChange('building')}
         value={address.building}
       />
       <TextField
-        margin="dense"
+        margin='dense'
         fullWidth
         required={required}
-        size="small"
-        label="Flat"
-        onChange={handleFieldChange("flat")}
-        value={address.building}
+        size='small'
+        label='Flat'
+        onChange={handleFieldChange('flat')}
+        value={address.flat}
       />
-      {!hideButton && <Button type="submit">Submit</Button>}
+      {!hideButton && <Button type='submit'>Submit</Button>}
     </Box>
-  );
-};
+  )
+}
 
-export default AddressForm;
+export default AddressForm

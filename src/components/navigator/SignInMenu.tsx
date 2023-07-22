@@ -1,14 +1,22 @@
-import { Button, Tab, Tabs } from '@mui/material'
+import { Box, Button, ButtonGroup, Tab, Tabs } from '@mui/material'
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-const SignInMenu = () => {
+const SignInMenu = ({ rawPoints }: { rawPoints?: boolean }) => {
+  if (rawPoints) {
+    return (
+      <Box display='flex' flexDirection='column' position='absolute' bottom='0' width='100%'>
+        <Button sx={{ borderRadius: 0 }} component={Link} to='signup'>Sign Up</Button>
+        <Button sx={{ borderRadius: 0, color: 'white' }} component={Link} to='signin' variant='contained'>Sign In</Button>
+      </Box>
+    )
+  }
+
   return (
-      <Tabs>
-        <Tab component={Link} to="signin" label="Sign In"/>
-        <Tab component={Link} to="signup" label="Sign Up"/>
-      </Tabs>
-      // <Button variant='contained'>Sign Up</Button>
+    <ButtonGroup>
+      <Button sx={{ borderRadius: 2 }} component={Link} to='signup'>Sign Up</Button>
+      <Button sx={{ borderRadius: 2, color: 'white' }} component={Link} to='signin' variant='contained'>Sign In</Button>
+    </ButtonGroup>
   )
 }
 

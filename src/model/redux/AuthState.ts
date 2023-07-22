@@ -1,7 +1,7 @@
-import UserData from "../service/UserData";
+import UserData from '../service/UserData'
 
-type AuthState = {
-  user: UserData;
-};
+interface AuthState {
+  user: UserData
+}
 
-export default AuthState;
+export default AuthState

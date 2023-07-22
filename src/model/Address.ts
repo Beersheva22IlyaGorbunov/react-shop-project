@@ -1,9 +1,9 @@
-type Address = {
-  country: string;
-  city: string;
-  street: string;
-  building: string;
-  flat: number;
+interface Address {
+  country: string
+  city: string
+  street: string
+  building: string
+  flat: number
 }
 
-export default Address;
+export default Address

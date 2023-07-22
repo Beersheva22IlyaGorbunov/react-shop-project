@@ -1,14 +1,14 @@
-import { Button, Paper, Typography } from "@mui/material";
-import React from "react";
-import OrdersTable from "./OrdersTable";
-import useOrdersRx from "../../hooks/admin/useOrdersRx";
-import OrdersList from "../OrdersList";
+import { Button, Paper, Typography } from '@mui/material'
+import React from 'react'
+import OrdersTable from './OrdersTable'
+import useOrdersRx from '../../hooks/admin/useOrdersRx'
+import OrdersList from '../OrdersList'
 
 const OrdersTab = () => {
-  const [isLoading, error, orders] = useOrdersRx();
+  const [isLoading, error, orders] = useOrdersRx()
   return (
     <Paper sx={{ p: 2 }}>
-      <Typography variant="h5">Orders</Typography>
+      <Typography variant='h5'>Orders</Typography>
       <OrdersList
         loading={isLoading}
         isEditable
@@ -20,7 +20,7 @@ const OrdersTab = () => {
         orders={orders}
       />
     </Paper>
-  );
-};
+  )
+}
 
-export default OrdersTab;
+export default OrdersTab

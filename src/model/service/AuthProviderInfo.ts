@@ -1,10 +1,10 @@
-import { AuthProvider } from "firebase/auth";
+import { AuthProvider } from 'firebase/auth'
 
-type AuthProviderInfo = {
-  provider: AuthProvider;
-  name: string;
-  iconUrl: string;
-  isEnable: boolean;
-};
+interface AuthProviderInfo {
+  provider: AuthProvider
+  name: string
+  iconUrl: string
+  isEnable: boolean
+}
 
-export default AuthProviderInfo;
+export default AuthProviderInfo
